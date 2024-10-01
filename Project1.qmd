@@ -3,6 +3,8 @@ title: "Project1"
 author: "Upendra Joshi & John Tuong"
 format: html
 editor: visual
+editor_options: 
+  chunk_output_type: console
 ---
 
 -   DRAFT
@@ -16,6 +18,28 @@ editor: visual
 -     Project 1 focuses on creating functions to query an API and process, manipulate, summarize and display data from the Public Use Microdata Sample Census.
 
 -     The Public Use Microdata Sample (PUMS) Census API is a collection of data files from the United States Census Buerau that provides access to a sample of the US population and housing units. This data is compiled from responses to the American Community Survey (ACS). The PUMS is comprised of two files: one for person records and the other for housing unit records. Specifically, it includes geographic and household information including, but not limited to: family type, household income, race, gender, etc. The purpose of this data is to help the research community to better understand the characteristics of households receiving assistance. In order to effectively use this data, the PUMS' API (Application Programming Interface) must be queried to be viewed and manipulated in RStudio.
+
+```{r}
+install.packages("tidyverse")
+install.packages("httr") #installed for get function
+install.packages("jsonlite") 
+install.packages("dplyr")
+
+library(tidyverse)
+library(httr)
+library(jsonlite)
+library(dplyr)
+```
+
+
+
+```{r}
+install.packages("tidycensus")
+
+library(tidycensus)
+
+
+
 
 ## PART I Obtaining the Data from PUMS API
 
