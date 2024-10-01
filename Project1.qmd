@@ -18,11 +18,11 @@ editor_options:
 
 ```{r}
 #Installed and loaded in the necessary packages to help create functions and manipulate/clean data.
-install.packages("tidyverse")
-install.packages("httr") 
-install.packages("jsonlite") 
-install.packages("dplyr")
-install.packages("tidycensus")
+#install.packages("tidyverse")
+#install.packages("httr") 
+#install.packages("jsonlite") 
+#install.packages("dplyr")
+#install.packages("tidycensus")
 
 library(tidyverse)
 library(httr)
