@@ -24,19 +24,70 @@ install.packages("tidyverse")
 install.packages("httr") #installed for get function
 install.packages("jsonlite") 
 install.packages("dplyr")
+install.packages("tidycensus")
 
 library(tidyverse)
 library(httr)
 library(jsonlite)
 library(dplyr)
+library(tidycensus)
+```
+
+```{r}
+#Creating base URL
+base_url <- paste0("https://api.census.gov/data/2022/acs/acs1/pums?get=SEX,PWGTP")
+response <- GET(url = base_url) #Making a get rest API call
+data <- content(response, as = "parsed", type = "application/json")
+
+data_as_tibble <- as_tibble(data)
+```
+
+```{r}
+#Created helper function in order to query API
+
+api_query <- function(year = 2022, state = "*", get = "AGEP,SEX", get_always = "PWGTP,") {
+  if (year > 2022 | year < 2010) {
+    print("Invalid year value. Please type in a number between 2010 and 2022")
+  }
+    base_url <- paste0("https://api.census.gov/data/",year,"/acs/acs1/pums?get=",get_always,get,"&for=state:",state) #Concatenating
+  response <- GET(url = base_url) #Making a get rest API call
+parsed <- fromJSON(rawToChar(response$content))
+data_as_tibble <- as_tibble(parsed)
+data_as_tibble <- data_as_tibble %>% 
+  rename(PWGTP = V1,
+         AGEP = V2,
+         state = V3) %>%
+  slice(-1) %>%
+  mutate(AGEP = as.integer(AGEP),
+       PWGTP = as.integer(PWGTP)) 
+return(data_as_tibble)
+}
+```
+
+
+```{r}
+api_query(get = "AGEP", year = 2015)
 ```
 
 
 
-```{r}
-install.packages("tidycensus")
 
-library(tidycensus)
+
+
+
+```{r}
+api_query(2021, "04", "SEX,PWGTP,AGEP")
+
+```
+
+
+
+
+
+
+
+
+
 
 
 
