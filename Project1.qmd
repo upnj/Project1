@@ -7,21 +7,19 @@ editor_options:
   chunk_output_type: console
 ---
 
--   DRAFT
-
 # ST: 558, Project 1
 
 ### By Upendra Joshi & John Tuong
 
 ## Introduction
 
--     Project 1 focuses on creating functions to query an API and process, manipulate, summarize and display data from the Public Use Microdata Sample Census.
-
--     The Public Use Microdata Sample (PUMS) Census API is a collection of data files from the United States Census Buerau that provides access to a sample of the US population and housing units. This data is compiled from responses to the American Community Survey (ACS). The PUMS is comprised of two files: one for person records and the other for housing unit records. Specifically, it includes geographic and household information including, but not limited to: family type, household income, race, gender, etc. The purpose of this data is to help the research community to better understand the characteristics of households receiving assistance. In order to effectively use this data, the PUMS' API (Application Programming Interface) must be queried to be viewed and manipulated in RStudio.
+-   The Public Use Microdata Sample (PUMS) Census API (Application Programming Interface) is a collection of data files from the United States Census Bureau that provides access to data samples of the U.S. population and housing units. More specifically, these PUMS data sets cover the HUD's (U.S. Department of Housing and Urban Development) largest rental assistance programs (Public Housing, Section 8, etc). This data is compiled from responses to the American Community Surveys (ACS). The PUMS is comprised of two files: one for person records and the other for housing unit records. It includes geographic and household information including, but not limited to: family type, household income, race, gender, etc. The PUMS' data sets are valuable sources of information to policymakers and the researchers, as it can give some insight on how to better allocate resources and focus on helping those who need it the most.  
+-   By leveraging these data sets, we hope to not only grow our R skills, but to learn a little more about the world around us. We'll be focusing on creating functions to query PUMS' Application Programming Interface (API) and process, manipulate, summarize and display data from the PUMS Census, as well as to potentially investigate interesting data points.
 
 ```{r}
+#Installed and loaded in the necessary packages to help create functions and manipulate/clean data.
 install.packages("tidyverse")
-install.packages("httr") #installed for get function
+install.packages("httr") 
 install.packages("jsonlite") 
 install.packages("dplyr")
 install.packages("tidycensus")
@@ -33,64 +31,46 @@ library(dplyr)
 library(tidycensus)
 ```
 
-```{r}
-#Creating base URL
-base_url <- paste0("https://api.census.gov/data/2022/acs/acs1/pums?get=SEX,PWGTP")
-response <- GET(url = base_url) #Making a get rest API call
-data <- content(response, as = "parsed", type = "application/json")
+-   For the first step, we are going to build a URL in order to interact with the PUMS' API. Building this URL will allow us to gain some insight on what all the PUMS' data may contain. After setting up the URL and making a get rest API call (a request sent to a server asking an API to provide a service/information), we're going to create a nice tibble to get a glimpse of what our base_url contains (take a look below!).
 
-data_as_tibble <- as_tibble(data)
+```{r}
+base_url <- "https://api.census.gov/data/2022/acs/acs1/pums?"
+initial_response <- GET(url = base_url)
+initial_parse <- fromJSON(rawToChar(initial_response$content))
+initial_info <- as_tibble(initial_parse$data)
+initial_info
 ```
 
-```{r}
-#Created helper function in order to query API
+-   For the next step, we'll be creating a function to query the PUMS' API. This query will allow for the collection and preparation of data to analyze. Our function, api_query(), contains the following parameters: year = 2022 is defaulted (it's user defined; you can only choose from years 2010 to 2022), state will populate a random number, APEG/PWGTP are defaulted, and PWGTP will always be returned.
 
-api_query <- function(year = 2022, state = "*", get = "AGEP,SEX", get_always = "PWGTP,") {
+# Do we have to use ALL of the numeric and ALL of the categorical variables?
+
+```{r}
+api_query <- function(year = 2022, #Default
+                      get = "AGEP,SEX", #Default
+                      num_var = c("GASP, GRPIP, JWAP, JWDP, JWMNP"),
+                      cat_var = c("FER, HHL, HISPEED, JWTRNS, SCH, SCHL"),
+                      get_always = "PWGTP,") {
   if (year > 2022 | year < 2010) {
     print("Invalid year value. Please type in a number between 2010 and 2022")
   }
-    base_url <- paste0("https://api.census.gov/data/",year,"/acs/acs1/pums?get=",get_always,get,"&for=state:",state) #Concatenating
-  response <- GET(url = base_url) #Making a get rest API call
-parsed <- fromJSON(rawToChar(response$content))
-data_as_tibble <- as_tibble(parsed)
-data_as_tibble <- data_as_tibble %>% 
-  rename(PWGTP = V1,
-         AGEP = V2,
-         state = V3) %>%
-  slice(-1) %>%
-  mutate(AGEP = as.integer(AGEP),
-       PWGTP = as.integer(PWGTP)) 
+  main_url <- paste0("https://api.census.gov/data/",year,"/acs/acs1/pums?get=",get_always, get)
+  response <- GET(url = main_url) 
+  parsed <- fromJSON(rawToChar(response$content))
+  data_as_tibble <- as_tibble(parsed)
+  data_as_tibble <- data_as_tibble %>% 
+    rename(PWGTP = V1,
+          AGEP = V2) %>%
+    slice(-1) %>%
+    mutate(AGEP = as.integer(AGEP),
+          PWGTP = as.integer(PWGTP)) # If too many, use across..*
 return(data_as_tibble)
 }
 ```
 
-
 ```{r}
-api_query(get = "AGEP", year = 2015)
+api_query(year = 2011, num_var = "GASP")
 ```
-
-
-
-
-
-
-
-```{r}
-api_query(2021, "04", "SEX,PWGTP,AGEP")
-
-```
-
-
-
-
-
-
-
-
-
-
-
-
 
 ## PART I Obtaining the Data from PUMS API
 
