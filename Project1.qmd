@@ -36,10 +36,17 @@ library(tidycensus)
 ```{r}
 
 url <- "https://api.census.gov/data/2022/acs/acs1/pums?"
+base_url <- "https://api.census.gov/data/2022/acs/acs1/pums?get=SEX,PWGTP,MAR&SCHL=24"
+initial_response <- GET(url = base_url)
+initial_parse <- fromJSON(rawToChar(initial_response$content))
+col_names <- (initial_parse[1,])
+colnames(initial_parse) <- col_names
+initial_parse <- initial_parse[-1,]
+initial_parse <- as_tibble(initial_parse)
+initial_parse
 
 base_url <- "https://api.census.gov/data/2022/acs/acs1/pums?get=SEX,PWGTP,MAR&SCHL=24"
 initial_response <- GET(url = base_url)
-str(initial_response, max.level = 1) # Check this JT
 initial_parse <- fromJSON(rawToChar(initial_response$content))
 col_names <- (initial_parse[1,])
 colnames(initial_parse) <- col_names
@@ -48,15 +55,30 @@ initial_parse <- as_tibble(initial_parse)
 initial_parse
 
 
-# Numeric variables
-num_vars <- c("AGEP", "GASP", "GRPIP", "JWAP", "JWDP", "JWMNP", "PWGTP")
+# Time Stuff
 
+temp <- httr::GET("https://api.census.gov/data/2022/acs/acs1/pums/variables/JWAP.json")
+
+#turn it into a list
+temp_list <- temp$content |> rawToChar() |>jsonlite::fromJSON()
+#grab just the names of JWAP and their values
+JWAP <- temp_list$values$item
+#reorder just so it is clearer
+JWAP_values <- JWAP[sort(names(JWAP))]
+
+
+
+# Numeric variables
+num_vars <- c("AGEP", "GASP", "GRPIP", "JWMNP", "PWGTP")
 
 # Categorical variables
 cat_vars <- c("FER", "HHL", "HISPEED", "JWTRNS", "SCH", "SCHL", "SEX")
 
+# Time variables
+time_vars <- c("JWAP", "JWDP")
+
 # Geography variables
-geo_vars <- c("all", "region", "division", "state")
+geo_vars <- c("All", "Region", "Division", "State")
 
 
 
@@ -69,18 +91,25 @@ year_checker <- function(year) {
 
 
 # Numeric Check
-num_checker <- function(initial_parse, num_vars) {
+num_checker <- function(initial_parse, num_vars, time_vars) {
     col_names <- colnames(initial_parse) 
       for (name in col_names) {
          if (name %in% num_vars) {
             print(name)   
             initial_parse[[name]] <- as.numeric(initial_parse[[name]])
-            return(initial_parse)
-    }
-  }
+            
+         }
+        if (name %in% time_vars) {
+            print(name)   
+            initial_parse[[name]] <- as.POSIXct(initial_parse[[name]], format = "%H:%M")
+            
+        }
+      }
+    return(initial_parse)
 }
 
-initial_parse <- num_checker(initial_parse, num_vars)
+# Below is to check our work
+# initial_parse <- num_checker(initial_parse, num_vars, time_vars)
 
 
 # Categorical variable check
@@ -89,35 +118,94 @@ cat_checker <- function(initial_parse, cat_vars) {
       for (name in col_names) {
          if (name %in% cat_vars) {
             print(name)   
-            initial_parse[[name]] <- as.character(initial_parse[[name]])
-            return(initial_parse)
+            initial_parse[[name]] <- as.factor(initial_parse[[name]])
     }
-  }
+      }
+      return(initial_parse)
 }
 
-cat_checker(initial_parse, cat_vars)
+# Below is to check our work
+# cat_checker(initial_parse, cat_vars)
 
 
 
 #Geo Checker
 geo_checker <- function(geography_level, geo_value, geo_vars) {
   if (geography_level %in% geo_vars) {
-    print(geography_level)
-    url2 <- paste0(url,"&for=",geography_level,":",geo_value)
-    return(url2)
+    print("Geography level is valid.") 
+  }
+  else {
+    print("Geography level is not valid.")
   }
 }
 
 
-geo_checker("state", "07", geo_vars)
-```
+# Below is to check our work
+# geo_checker("State", "08", geo_vars)
 
+
+# Query the Census API
+url <- "https://api.census.gov/data/"
+initial_parse_final <- tibble()
+census_query <- function(year, geography_level, geo_value, get, url) {
+    year_list <- strsplit(year, ",")
+    geo_meta <- paste0("&for=", geography_level,":",geo_value)
+    if (geography_level == "All") {
+      geo_meta <- ""
+    }
+    for (i in year_list[[1]]) {
+      query_url <- paste0(url,i,"/acs/acs1/pums?","get=PWGTP,",get,geo_meta)
+      initial_response <- GET(url = query_url)
+      initial_parse <- fromJSON(rawToChar(initial_response$content))
+      col_names <- (initial_parse[1,])
+      colnames(initial_parse) <- col_names
+      initial_parse <- initial_parse[-1,]
+      initial_parse <- as_tibble(initial_parse)
+      initial_parse_final <- bind_rows(initial_parse,initial_parse_final)
+    }
+    return(initial_parse_final)
+}
+
+# Below is to check our work
+# initial_parse <- census_query(year = "2013", "All", "", "AGEP,SEX", url)
+
+
+
+# Main API Query Function
+
+main_query <- function(year = "2022", 
+                       geography_level = "All", 
+                       geo_value, 
+                       get = "SEX,AGEP,PWGTP", 
+                       url = url, 
+                       num_vars = num_vars, 
+                       cat_vars = cat_vars, 
+                       time_vars = time_vars, 
+                       geo_vars = geo_vars) {
+    initial_parse <- census_query(year, geography_level, geo_value, get, url)
+    initial_parse <- num_checker(initial_parse, num_vars, time_vars)
+    initial_parse <- cat_checker(initial_parse, cat_vars)
+    geo_checker(geography_level, geo_value, geo_vars)
+    year_checker(year) 
+    return(initial_parse)
+} 
+  
+
+# Testing purposes/Example
+test <- main_query("2015", "State", "06", "SCHL,GASP,PWGTP", url, num_vars, cat_vars, time_vars, geo_vars)
+
+
+
+
+
+```
 
 
 -   For the next step, we'll be creating a function to query the PUMS' API. This query will allow for the collection and preparation of data to analyze. Our function, api_query(), contains the following parameters: year = 2022 is defaulted (it's user defined; you can only choose from years 2010 to 2022), state will populate a random number, APEG/PWGTP are defaulted, and PWGTP will always be returned.
 
 
 ```{r}
+# NOTES/DONT USE
 api_query <- function(year = 2022, #Default
                       get = "AGEP,SEX", #Default
                       state =  "07") #Default
@@ -139,13 +227,8 @@ api_query <- function(year = 2022, #Default
           PWGTP = as.integer(PWGTP)) # If too many, use across..*
 return(data_as_tibble)
 }
-
+# NOTES/DONT USE
 ```
-
-# api_query(year = 2018, get = "GASP")
-
-
-
 
 
 ## PART I Obtaining the Data from PUMS API
