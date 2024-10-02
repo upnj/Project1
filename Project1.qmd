@@ -13,7 +13,7 @@ editor_options:
 
 ## Introduction
 
--   The Public Use Microdata Sample (PUMS) Census API (Application Programming Interface) is a collection of data files from the United States Census Bureau that provides access to data samples of the U.S. population and housing units. More specifically, these PUMS data sets cover the HUD's (U.S. Department of Housing and Urban Development) largest rental assistance programs (Public Housing, Section 8, etc). This data is compiled from responses to the American Community Surveys (ACS). The PUMS is comprised of two files: one for person records and the other for housing unit records. It includes geographic and household information including, but not limited to: family type, household income, race, gender, etc. The PUMS' data sets are valuable sources of information to policymakers and the researchers, as it can give some insight on how to better allocate resources and focus on helping those who need it the most.  
+-   The Public Use Microdata Sample (PUMS) Census API (Application Programming Interface) is a collection of data files from the United States Census Bureau that provides access to data samples of the U.S. population and housing units. More specifically, these PUMS data sets cover the HUD's (U.S. Department of Housing and Urban Development) largest rental assistance programs (Public Housing, Section 8, etc). This data is compiled from responses to the American Community Surveys (ACS). The PUMS is comprised of two files: one for person records and the other for housing unit records. It includes geographic and household information including, but not limited to: family type, household income, race, gender, etc. The PUMS' data sets are valuable sources of information to policymakers and the researchers, as it can give some insight on how to better allocate resources and focus on helping those who need it the most.
 -   By leveraging these data sets, we hope to not only grow our R skills, but to learn a little more about the world around us. We'll be focusing on creating functions to query PUMS' Application Programming Interface (API) and process, manipulate, summarize and display data from the PUMS Census, as well as to potentially investigate interesting data points.
 
 ```{r}
@@ -34,43 +34,119 @@ library(tidycensus)
 -   For the first step, we are going to build a URL in order to interact with the PUMS' API. Building this URL will allow us to gain some insight on what all the PUMS' data may contain. After setting up the URL and making a get rest API call (a request sent to a server asking an API to provide a service/information), we're going to create a nice tibble to get a glimpse of what our base_url contains (take a look below!).
 
 ```{r}
-base_url <- "https://api.census.gov/data/2022/acs/acs1/pums?"
+
+url <- "https://api.census.gov/data/2022/acs/acs1/pums?"
+
+base_url <- "https://api.census.gov/data/2022/acs/acs1/pums?get=SEX,PWGTP,MAR&SCHL=24"
 initial_response <- GET(url = base_url)
+str(initial_response, max.level = 1) # Check this JT
 initial_parse <- fromJSON(rawToChar(initial_response$content))
-initial_info <- as_tibble(initial_parse$data)
-initial_info
+col_names <- (initial_parse[1,])
+colnames(initial_parse) <- col_names
+initial_parse <- initial_parse[-1,]
+initial_parse <- as_tibble(initial_parse)
+initial_parse
+
+
+# Numeric variables
+num_vars <- c("AGEP", "GASP", "GRPIP", "JWAP", "JWDP", "JWMNP", "PWGTP")
+
+
+# Categorical variables
+cat_vars <- c("FER", "HHL", "HISPEED", "JWTRNS", "SCH", "SCHL", "SEX")
+
+# Geography variables
+geo_vars <- c("all", "region", "division", "state")
+
+
+
+# Year Checker
+year_checker <- function(year) {
+  if (year > 2022 | year < 2010) {
+    print("Invalid year value. Please type in a number between 2010 and 2022")
+  }
+}
+
+
+# Numeric Check
+num_checker <- function(initial_parse, num_vars) {
+    col_names <- colnames(initial_parse) 
+      for (name in col_names) {
+         if (name %in% num_vars) {
+            print(name)   
+            initial_parse[[name]] <- as.numeric(initial_parse[[name]])
+            return(initial_parse)
+    }
+  }
+}
+
+initial_parse <- num_checker(initial_parse, num_vars)
+
+
+# Categorical variable check
+cat_checker <- function(initial_parse, cat_vars) {
+    col_names <- colnames(initial_parse) 
+      for (name in col_names) {
+         if (name %in% cat_vars) {
+            print(name)   
+            initial_parse[[name]] <- as.character(initial_parse[[name]])
+            return(initial_parse)
+    }
+  }
+}
+
+cat_checker(initial_parse, cat_vars)
+
+
+
+#Geo Checker
+geo_checker <- function(geography_level, geo_value, geo_vars) {
+  if (geography_level %in% geo_vars) {
+    print(geography_level)
+    url2 <- paste0(url,"&for=",geography_level,":",geo_value)
+    return(url2)
+  }
+}
+
+
+geo_checker("state", "07", geo_vars)
 ```
+
+
 
 -   For the next step, we'll be creating a function to query the PUMS' API. This query will allow for the collection and preparation of data to analyze. Our function, api_query(), contains the following parameters: year = 2022 is defaulted (it's user defined; you can only choose from years 2010 to 2022), state will populate a random number, APEG/PWGTP are defaulted, and PWGTP will always be returned.
 
-# Do we have to use ALL of the numeric and ALL of the categorical variables?
 
 ```{r}
 api_query <- function(year = 2022, #Default
                       get = "AGEP,SEX", #Default
-                      num_var = c("GASP, GRPIP, JWAP, JWDP, JWMNP"),
-                      cat_var = c("FER, HHL, HISPEED, JWTRNS, SCH, SCHL"),
-                      get_always = "PWGTP,") {
+                      state =  "07") #Default
+                       {
   if (year > 2022 | year < 2010) {
     print("Invalid year value. Please type in a number between 2010 and 2022")
   }
-  main_url <- paste0("https://api.census.gov/data/",year,"/acs/acs1/pums?get=",get_always, get)
+  main_url <- paste0("https://api.census.gov/data/",year,"/acs/acs1/pums?get=PWGTP,", get,"&for=state:",state)
   response <- GET(url = main_url) 
   parsed <- fromJSON(rawToChar(response$content))
+  col_names1 <- (parsed[1,])
+  colnames(parsed) <- col_names1
+  parsed <- parsed[-1,]
   data_as_tibble <- as_tibble(parsed)
+  print(colnames(data_as_tibble))
   data_as_tibble <- data_as_tibble %>% 
-    rename(PWGTP = V1,
-          AGEP = V2) %>%
     slice(-1) %>%
     mutate(AGEP = as.integer(AGEP),
           PWGTP = as.integer(PWGTP)) # If too many, use across..*
 return(data_as_tibble)
 }
+
 ```
 
-```{r}
-api_query(year = 2011, num_var = "GASP")
-```
+# api_query(year = 2018, get = "GASP")
+
+
+
+
 
 ## PART I Obtaining the Data from PUMS API
 
