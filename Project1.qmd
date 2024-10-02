@@ -1,6 +1,7 @@
 ---
 title: "Project1"
 author: "Upendra Joshi & John Tuong"
+  warning: false
 format: html
 editor: visual
 editor_options: 
@@ -14,16 +15,11 @@ editor_options:
 ## Introduction
 
 -   The Public Use Microdata Sample (PUMS) Census API (Application Programming Interface) is a collection of data files from the United States Census Bureau that provides access to data samples of the U.S. population and housing units. More specifically, these PUMS data sets cover the HUD's (U.S. Department of Housing and Urban Development) largest rental assistance programs (Public Housing, Section 8, etc). This data is compiled from responses to the American Community Surveys (ACS). The PUMS is comprised of two files: one for person records and the other for housing unit records. It includes geographic and household information including, but not limited to: family type, household income, race, gender, etc. The PUMS' data sets are valuable sources of information to policymakers and the researchers, as it can give some insight on how to better allocate resources and focus on helping those who need it the most.
--   By leveraging these data sets, we hope to not only grow our R skills, but to learn a little more about the world around us. We'll be focusing on creating functions to query PUMS' Application Programming Interface (API) and process, manipulate, summarize and display data from the PUMS Census, as well as to potentially investigate interesting data points.
 
+-   By leveraging these data sets, we hope to not only grow our R skills, but to learn a little more about the world around us. For the first half, we'll be working on building functions, both helper and main functions, that will help us examine, check, process, manipulate, and build our main function to query PUMS' API. The second half of the project will build onto the first and delve into functions to that will summarize data and create visuals.
+
+- First thing's first, with every R project, we install and load in the necessary packaaes to help create functions to do what need. 
 ```{r}
-#Installed and loaded in the necessary packages to help create functions and manipulate/clean data.
-#install.packages("tidyverse")
-#install.packages("httr") 
-#install.packages("jsonlite") 
-#install.packages("dplyr")
-#install.packages("tidycensus")
-
 library(tidyverse)
 library(httr)
 library(jsonlite)
@@ -31,28 +27,21 @@ library(dplyr)
 library(tidycensus)
 ```
 
--   For the first step, we are going to build a URL in order to interact with the PUMS' API. Building this URL will allow us to gain some insight on what all the PUMS' data may contain. After setting up the URL and making a get rest API call (a request sent to a server asking an API to provide a service/information), we're going to create a nice tibble to get a glimpse of what our base_url contains (take a look below!).
+-   Next, we are going to show how URL can interact with the PUMS' API. Typically we'd start with a more bare URL when building a URL from scratch (more on that later), but I ended choosing this one because it provided a more visually appealing output as an example. After setting up the URL and making a GET request to PUMS' API (a request sent to a server asking an API to provide a service/information), we'll take that raw data, and parse it into JSON. The initial_parse returns a tibble with the column names on the first row, so we extract those names and set them as the column names. Then we drop the first row and create a nice tibble to get a glimpse of what information the example_url contains (take a look below!). These are the steps to querying APIs. So in short, we assign a URL, formulate the API request, send it, allow time to handle the response, and process the data.
+
+```{r}
+example_url <- "https://api.census.gov/data/2022/acs/acs1/pums?get=SEX,PWGTP,MAR&SCHL=24"
+initial_response <- GET(url = example_url)
+initial_parse <- fromJSON(rawToChar(initial_response$content))
+col_names <- (initial_parse[1,])
+colnames(initial_parse) <- col_names
+initial_parse <- initial_parse[-1,]
+initial_parse <- as_tibble(initial_parse)
+initial_parse
+```
 
 ```{r}
 
-url <- "https://api.census.gov/data/2022/acs/acs1/pums?"
-base_url <- "https://api.census.gov/data/2022/acs/acs1/pums?get=SEX,PWGTP,MAR&SCHL=24"
-initial_response <- GET(url = base_url)
-initial_parse <- fromJSON(rawToChar(initial_response$content))
-col_names <- (initial_parse[1,])
-colnames(initial_parse) <- col_names
-initial_parse <- initial_parse[-1,]
-initial_parse <- as_tibble(initial_parse)
-initial_parse
-
-base_url <- "https://api.census.gov/data/2022/acs/acs1/pums?get=SEX,PWGTP,MAR&SCHL=24"
-initial_response <- GET(url = base_url)
-initial_parse <- fromJSON(rawToChar(initial_response$content))
-col_names <- (initial_parse[1,])
-colnames(initial_parse) <- col_names
-initial_parse <- initial_parse[-1,]
-initial_parse <- as_tibble(initial_parse)
-initial_parse
 
 
 # Time Stuff
@@ -129,7 +118,7 @@ cat_checker <- function(initial_parse, cat_vars) {
 
 
 
-#Geo Checker
+#Geography Checker
 geo_checker <- function(geography_level, geo_value, geo_vars) {
   if (geography_level %in% geo_vars) {
     print("Geography level is valid.") 
@@ -200,9 +189,7 @@ test <- main_query("2015", "State", "06", "SCHL,GASP,PWGTP", url, num_vars, cat_
 
 ```
 
-
 -   For the next step, we'll be creating a function to query the PUMS' API. This query will allow for the collection and preparation of data to analyze. Our function, api_query(), contains the following parameters: year = 2022 is defaulted (it's user defined; you can only choose from years 2010 to 2022), state will populate a random number, APEG/PWGTP are defaulted, and PWGTP will always be returned.
-
 
 ```{r}
 # NOTES/DONT USE
@@ -229,7 +216,6 @@ return(data_as_tibble)
 }
 # NOTES/DONT USE
 ```
-
 
 ## PART I Obtaining the Data from PUMS API
 
