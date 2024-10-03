@@ -1,5 +1,5 @@
 ---
-title: "Project1"
+title: "ST: 558, Project1"
 author: "Upendra Joshi & John Tuong"
   warning: false
 format: html
@@ -8,17 +8,15 @@ editor_options:
   chunk_output_type: console
 ---
 
-# ST: 558, Project 1
-
-### By Upendra Joshi & John Tuong
-
-## Introduction
+# Introduction
 
 -   The Public Use Microdata Sample (PUMS) Census API (Application Programming Interface) is a collection of data files from the United States Census Bureau that provides access to data samples of the U.S. population and housing units. More specifically, these PUMS data sets cover the HUD's (U.S. Department of Housing and Urban Development) largest rental assistance programs (Public Housing, Section 8, etc). This data is compiled from responses to the American Community Surveys (ACS). The PUMS is comprised of two files: one for person records and the other for housing unit records. It includes geographic and household information including, but not limited to: family type, household income, race, gender, etc. The PUMS' data sets are valuable sources of information to policymakers and the researchers, as it can give some insight on how to better allocate resources and focus on helping those who need it the most.
 
 -   By leveraging these data sets, we hope to not only grow our R skills, but to learn a little more about the world around us. For the first half, we'll be working on building functions, both helper and main functions, that will help us examine, check, process, manipulate, and build our main function to query PUMS' API. The second half of the project will build onto the first and delve into functions to that will summarize data and create visuals.
 
-- First thing's first, with every R project, we install and load in the necessary packaaes to help create functions to do what need. 
+# PART I Obtaining the Data from PUMS API
+
+-   First thing's first, with every R project, we install and load in the necessary packaaes to help create functions to do what need.
 
 ```{r}
 library(tidyverse)
@@ -32,7 +30,7 @@ library(tidycensus)
 
 ```{r}
 example_url <- "https://api.census.gov/data/2022/acs/acs1/pums?get=SEX,PWGTP,MAR&SCHL=24"
-initial_response <- GET(url = example_url)
+initial_response <- GET(example_url)
 initial_parse <- fromJSON(rawToChar(initial_response$content))
 col_names <- (initial_parse[1,])
 colnames(initial_parse) <- col_names
@@ -41,7 +39,7 @@ initial_parse <- as_tibble(initial_parse)
 head(initial_parse)
 ```
 
-- To keep things simple and organized, below are all of the variables and their assigned values. Here we created vectors for each variable to reference later on.
+-   To keep things simple and organized, below are all of the variables and their assigned values. Here we created vectors for each variable to reference later on.
 
 ```{r}
 # Numeric variables
@@ -57,7 +55,7 @@ time_vars <- c("JWAP", "JWDP")
 geo_vars <- c("All", "Region", "Division", "State")
 ```
 
-- Next we'll dive into all of the functions we made in order to create our main API query. The first one we have is the year_checker function. Our if statement here only allows the function to pass if the year is between 2010 to 2022 (values are inclusive). However, if the year falls outside of the range, a stop function will raise an error message and cease execution of the code. 
+-   Next we'll dive into all of the functions we made in order to create our main API query. The first one we have is the year_checker function. Our if statement here only allows the function to pass if the year is between 2010 to 2022 (values are inclusive). However, if the year falls outside of the range, a stop function will raise an error message and cease execution of the code.
 
 ```{r}
 # Year Checker
@@ -68,7 +66,7 @@ year_checker <- function(year) {
 }
 ```
 
-- Our second function, the num_checker, checks and coerces our assigned numeric  and time variables to their respective data types. Due to the parsed JSON data, our data defaulted to a data type of character. Coercing the variables to their actual data type allows for meaning manipulation and analysis. We created a function with three parameters: initial_parse, num_vars, and time_vars. The function works by looping the column names from initial_parse. Each column name is checked to see if its name matches any from the 2 vectors, num_vars or time_vars. If the column name matches in num_vars, it will be converted to numeric through the use of as.numeric. Similarly with time_vars, it will be converted to a time format through the use of as.POSIXct. Once the function finishes looping, it will return the modified tibble/dataframe.
+-   Our second function, the num_checker, checks and coerces our assigned numeric and time variables to their respective data types. Due to the parsed JSON data, our data defaulted to a data type of character. Coercing the variables to their actual data type allows for meaning manipulation and analysis. We created a function with three parameters: initial_parse, num_vars, and time_vars. The function works by looping the column names from initial_parse. Each column name is checked to see if its name matches any from the 2 vectors, num_vars or time_vars. If the column name matches in num_vars, it will be converted to numeric through the use of as.numeric. Similarly with time_vars, it will be converted to a time format through the use of as.POSIXct. Once the function finishes looping, it will return the modified tibble/dataframe.
 
 ```{r}
 # Numeric Check
@@ -93,8 +91,6 @@ num_checker <- function(initial_parse, num_vars, time_vars) {
 initial_parse <- num_checker(initial_parse, num_vars, time_vars)
 ```
 
-
-
 ```{r}
 # Categorical variable check
 cat_checker <- function(initial_parse, cat_vars) {
@@ -112,8 +108,6 @@ cat_checker <- function(initial_parse, cat_vars) {
 cat_checker(initial_parse, cat_vars)
 ```
 
-
-
 ```{r}
 #Geography Checker
 geo_checker <- function(geography_level, geo_value, geo_vars) {
@@ -129,8 +123,6 @@ geo_checker <- function(geography_level, geo_value, geo_vars) {
 # Testing purposes/example
 geo_checker("State", "08", geo_vars)
 ```
-
-
 
 ```{r}
 # Query the Census API
@@ -160,6 +152,7 @@ census_query <- function(year, geography_level, geo_value, get, url) {
 initial_parse <- census_query(year = "2013", "All", "", "AGEP,SEX", url)
 ```
 
+## API Function
 
 ```{r}
 # Main API Query Function
@@ -182,10 +175,8 @@ main_query <- function(year = "2022",
   
 
 # Testing purposes/example
-test <- main_query("2008", "State", "06", "SCHL", url, num_vars, cat_vars, time_vars, geo_vars)
+test <- main_query("2022", "State", "06", "SCHL", url, num_vars, cat_vars, time_vars, geo_vars)
 ```
-
-
 
 ```{r}
 
@@ -231,16 +222,12 @@ return(data_as_tibble)
 # NOTES/DONT USE
 ```
 
-## PART I Obtaining the Data from PUMS API
+# PART II Summarizing the Data and Plots
 
-### API Function
-
-## PART II Summarizing the Data and Plots
-
-### Summary Function
+## Summary Function
 
 -   In this section we have created 2 functions "Summary" function takes the data from tibble and generate summary statistics (mean and standard deviation) for all numeric variables and counts for all categorical variables from the data frame. This function takes three arguments - class census, numeric variables to generate summary statistics and categorical variables.
 
-### Plot Function
+## Plot Function
 
--   test this
+
