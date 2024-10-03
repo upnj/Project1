@@ -18,7 +18,7 @@ editor_options:
 
 -   By leveraging these data sets, we hope to not only grow our R skills, but to learn a little more about the world around us. For the first half, we'll be working on building functions, both helper and main functions, that will help us examine, check, process, manipulate, and build our main function to query PUMS' API. The second half of the project will build onto the first and delve into functions to that will summarize data and create visuals.
 
--   First thing's first, with every R project, we install and load in the necessary packaaes to help create functions to do what need.
+-   First thing's first, with every R project, we install and load in the necessary packaaes to help create functions to do what we need.
 
 ```{r}
 # Loading packages
@@ -27,6 +27,7 @@ library(httr)
 library(jsonlite)
 library(dplyr)
 library(tidycensus)
+library(lubridate)
 ```
 
 -   Next, we are going to show how URL can interact with the PUMS' API. Typically we'd start with a more bare URL when building a URL from scratch (more on that later), but I ended choosing this one because it provided a more visually appealing output as an example. After setting up the URL and making a GET, request to PUMS' API (a request sent to a server asking an API to provide a service/information), we'll take that raw data, and parse it into JSON. The initial_parse returns a tibble with the column names on the first row, so we extract those names and set them as the column names. Then we drop the first row and print a nice little tibble to get a glimpse of what information the example_url contains (take a look below!). Here we have a small tibble, 6x4, because we used the function head. These are the steps to querying APIs. So in short, we assign a URL, formulate the API request, send it, allow time to handle the response, and process the data.
@@ -57,6 +58,9 @@ time_vars <- c("JWAP", "JWDP")
 
 # Geography variables
 geo_vars <- c("All", "Region", "Division", "State")
+
+# Combined variables (numeric categorical, time)
+combined_vars <- c("AGEP", "GASP", "GRPIP", "JWMNP", "PWGTP", "FER", "HHL", "HISPEED", "JWTRNS", "SCH", "SCHL", "SEX", "JWAP", "JWDP")
 ```
 
 -   Next we'll dive into all of the functions we made in order to create our main API query. The first one we have is the year_checker function. Our if statement here only allows the function to pass if the year is between 2010 to 2022 (values are inclusive). However, if the year falls outside of the range, a stop function will raise an error message and cease execution of the code.
@@ -72,11 +76,11 @@ year_checker <- function(year) {
 }
 ```
 
--   Our second function, the num_checker, checks and coerces our assigned numeric and time variables to their respective data types. Due to the parsed JSON data, our data defaulted to a data type of character. Coercing the variables to their actual data type allows for meaning manipulation and analysis. We created a function with three parameters: initial_parse, num_vars, and time_vars. The function works by looping the column names from initial_parse. Each column name is checked to see if its name matches any from the 2 vectors, num_vars or time_vars. If the column name matches in num_vars, it will be converted to numeric through the use of as.numeric. Similarly with time_vars, it will be converted to a time format through the use of as.POSIXct. Once the function finishes looping, it will return the modified tibble/dataframe.
+-   Our second function, the num_checker, checks and coerces our assigned numeric and time variables to their respective data types. Due to the parsed JSON data, our data defaulted to a data type of character. Coercing the variables to the desired data type allows for meaning manipulation and analysis. This function contains 1 parameter and takes in 2 vectors, num_vars and time_vars, which is used to determine if the user input is of type num or time then converts it respectively to its desired data type. The function works by looping the column names from initial_parse. Each column name is checked to see if its name matches any from the 2 vectors, num_vars or time_vars. If the column name matches in num_vars, it will be converted to numeric through the use of as.numeric. Similarly with time_vars, it will be converted to a time format through the use of as.POSIXct. Once the function finishes looping, it will return the modified tibble/dataframe.
 
 ```{r}
 # Numeric Checker
-# Function to convert columns to desired numeric and time data types
+# Function to convert columns to desired numeric data types
 
 num_checker <- function(initial_parse) {
     num_vars <- c("AGEP", "GASP", "GRPIP", "JWMNP", "PWGTP")
@@ -90,7 +94,7 @@ num_checker <- function(initial_parse) {
          }
         if (name %in% time_vars) {
             print(name)   
-            initial_parse[[name]] <- as.POSIXct(initial_parse[[name]], format = "%H:%M")
+            #initial_parse[[name]] <- as.POSIXct(initial_parse[[name]], format = "%H:%M")
             
         }
       }
@@ -98,14 +102,19 @@ num_checker <- function(initial_parse) {
 }
 
 # Testing purposes/example
-initial_parse <- num_checker(initial_parse)
+# initial_parse <- num_checker(initial_parse)
 ```
+
+-   Our time checker function works to change our time_vars into desired time data tpes.
 
 ```{r}
 
-# Time Stuff
-temp <- httr::GET("https://api.census.gov/data/2022/acs/acs1/pums/variables/JWAP.json")
+# Time Checker - NOT FINISHED
+# Function to convert columns to desired time data types
+# Currently NOT a function yet, but almost
 
+# JWAP - Example J. Post to use* remember to clean these
+temp <- httr::GET("https://api.census.gov/data/2022/acs/acs1/pums/variables/JWAP.json")
 #turn it into a list
 temp_list <- temp$content |> rawToChar() |>jsonlite::fromJSON()
 #grab just the names of JWAP and their values
@@ -113,7 +122,74 @@ JWAP <- temp_list$values$item
 #reorder just so it is clearer
 JWAP_values <- JWAP[sort(names(JWAP))]
 
+
+count = 1
+for (a in JWAP_values){
+    if(a!="N/A (not a worker; worker who worked from home)"){
+        time_list = list()
+        time_split <- strsplit(a, " to ")
+        for (i in time_split[[1]]) {
+          #print(i)
+          i <- gsub("\\.",'',i)
+          i <- gsub(" ",'', i)
+          date_time <- strptime(i, format = "%I:%M%p")
+          sec_since_mn <- as.numeric(difftime(date_time, as.POSIXct("00:00", format = "%H:%M"), units = "secs"))
+          time_list <- append(time_list, sec_since_mn)
+        }
+          JWAP_values[[count]] <- (time_list[[1]] + time_list[[2]]) / 2
+          avg_time<- (time_list[[1]] + time_list[[2]]) / 2
+          avg_time2 <- as.POSIXct(avg_time, origin = "1970-01-01", tz = "UTC")
+          JWAP_values[[count]] <- strftime(avg_time2, format = "%I:%M%p")
+          
+    }
+
+  else JWAP_values[[count]] <- a
+  count = count + 1
+}
+
+
+
+
+
+# JWDP - Example J. Post to use* remember to clean these
+temp <- httr::GET("https://api.census.gov/data/2022/acs/acs1/pums/variables/JWDP.json")
+#turn it into a list
+temp_list <- temp$content |> rawToChar() |>jsonlite::fromJSON()
+#grab just the names of JWDP and their values
+JWDP <- temp_list$values$item
+#reorder just so it is clearer
+JWDP_values <- JWDP[sort(names(JWDP))]
+
+
+count = 1
+for (a in JWDP_values){
+    if(a!="N/A (not a worker; worker who worked from home)"){
+        time_list = list()
+        time_split <- strsplit(a, " to ")
+        for (i in time_split[[1]]) {
+          #print(i)
+          i <- gsub("\\.",'',i)
+          i <- gsub(" ",'', i)
+          date_time <- strptime(i, format = "%I:%M%p")
+          sec_since_mn <- as.numeric(difftime(date_time, as.POSIXct("00:00", format = "%H:%M"), units = "secs"))
+          time_list <- append(time_list, sec_since_mn)
+        }
+          JWDP_values[[count]] <- (time_list[[1]] + time_list[[2]]) / 2
+          avg_time<- (time_list[[1]] + time_list[[2]]) / 2
+          avg_time2 <- as.POSIXct(avg_time, origin = "1970-01-01", tz = "UTC")
+          JWDP_values[[count]] <- strftime(avg_time2, format = "%I:%M%p")
+          
+    }
+
+  else JWDP_values[[count]] <- a
+  count = count + 1
+}
+
+
+
 ```
+
+-   Categorical checker works similarly to the numeric checker. This function contains 1 parameter and takes in 1 vector, which is used to determine if the user input is of type factor then converts it respectively to its desired data type.
 
 ```{r}
 # Categorical checker
@@ -128,16 +204,23 @@ cat_checker <- function(initial_parse) {
             initial_parse[[name]] <- as.factor(initial_parse[[name]])
     }
       }
+    initial_parse <- initial_parse %>%
+      mutate(
+        SEX = recode(SEX, "1" = "Male", "2" = "Female"))
       return(initial_parse)
 }
 
 # Testing purposes/example
-cat_checker(initial_parse)
+# cat_checker(initial_parse)
 ```
 
+-   Next we have the geography checker. This function has 1 parameter and takes in 1 vector. If the provided geography_level is in the geo_vars vector, it will print that the geography level is valid. If not then it will print is not valid.
+
 ```{r}
-#Geography Checker
-geo_checker <- function(geography_level, geo_value) {
+# Geography Checker
+# Function to specify and  check if geography level is correct
+
+geo_checker <- function(geography_level, geography_subset) {
   geo_vars <- c("All", "Region", "Division", "State")
   if (geography_level %in% geo_vars) {
     print("Geography level is valid.") 
@@ -149,29 +232,40 @@ geo_checker <- function(geography_level, geo_value) {
 
 
 # Testing purposes/example
-geo_checker("State", "08")
+# geo_checker("State", "08")
 ```
 
-```{r}
-# Helper function to process API status
-
-api_status <- function()
-```
+-   Here we have a function to query the census. This function contains 4 parameters. First, an empty tibble is initialized in order to store the results; this is important as it holds the multiple tibbles to later bind together. We assign a variable named year_list to take on the function string split for parameter, year, because we want to allow the user to be able to specify multiple years of survey data. String split works here because when inputting multiple years, "2012,2013,2015", the user needs to input the years all as one string, then strsplit will work to split the different years into a list of year to call each year separately. The for loop at the bottom, (i in year_list\[\[1\]\]), loops over the list of years from the user into the query_url, allowing them to make API requests for each given year.
+-   Next, there are some words that we hard coded into the URL because we needed to return those columns, we chose: "PWGTP", "GASP", and "FER". However, if the user doesn't know, they could input one of these columns again, producing a duplicate column. To fix this, we have to use grepl, to search for a string within a string then we use gsub to remove the said string. The second gsub is a catch all, removing commas from before/after the string due to user input. This way, even if the user inputs those columns, it would no longer create a duplicate. Then we create an if statement where it does not allow the user to input a geography_subset if they choose "All" by creating a variable named geo_meta and add it onto our query_url below. So to briefly go over our first example, bottom portion of the code is using the given query_url, we send a GET request to formulate the API request, allow time to handle the response, process the data, extract column nam, apply them accordingly, then create tibbles. As mentioned earlier, if user inputs multiple years then the for loop won't end until the last inputted year, then the bind_rows function will combine all of the tibbles from each year of the user input together.
 
 ```{r}
-# Query the Census API
-# Created helper function to use GET here
+# Function to Query the Census API 
+# Created if statements using grepl/gsub to remove duplicate columns
+# Allow users to call multiple years then combining tibbles as the end using bind_rowss
+# Used helper GET here then turned into tibble
 
-census_query <- function(year, geography_level, geo_value, get) {
+census_query <- function(year, geography_level, geography_subset, get) {
     initial_parse_final <- tibble()
     year_list <- strsplit(year, ",")
     url <- "https://api.census.gov/data/"
-    geo_meta <- paste0("&for=", geography_level,":",geo_value)
+    if (grepl("PWGTP", get)) {
+      get <- gsub("PWGTP|PWGTP,",'',get) # to remove actual value or the comma after
+      get <- gsub("^\\,|\\,$",'',get) # catch all, if there's a comma before/after of user input
+    }
+    if (grepl("GASP", get)) {
+      get <- gsub("GASP|GASP,",'',get)
+      get <- gsub("^\\,|\\,$",'',get)
+    }
+    if (grepl("FER", get)) {
+      get <- gsub("FER|FER,",'',get)
+      get <- gsub("^\\,|\\,$",'',get)
+    }
+    geo_meta <- paste0("&for=", geography_level,":",geography_subset)
     if (geography_level == "All") {
       geo_meta <- ""
     }
     for (i in year_list[[1]]) {
-      query_url <- paste0(url,i,"/acs/acs1/pums?","get=PWGTP,GASP,",get,geo_meta)
+      query_url <- paste0(url,i,"/acs/acs1/pums?","get=PWGTP,GASP,FER,",get,geo_meta)
       initial_response <- GET(url = query_url)
       initial_parse <- fromJSON(rawToChar(initial_response$content))
       col_names <- (initial_parse[1,])
@@ -184,28 +278,44 @@ census_query <- function(year, geography_level, geo_value, get) {
 }
 
 
-
 # Testing purposes/example
-initial_parse <- census_query(year = "2011", "State", "08", "AGEP,SEX")
+# initial_parse <- census_query(year = "2011,2014", "State", "08", "AGEP,SEX")
 ```
+
+-   Now we can create our final/main API query. This API query contains 4 parameters (year = "2022", geography_level = "All", geography_subset and get = "SEX,AGEP,PWGTP", with their respective defaults) and takes in vector combined_vars. We create a strsplit for the get results, similarly to what we did for the years in the census_query results. When a user inputs variables, it will check and ensure those column names are valid. If they are then it will print, "Column X entered is valid" and if not then it will tell the user to try again. After that, initial_parse is reassigned and overwritten once it goes through each function (census_query, num_checker, time_checker, cat_checker) and checker (geo_checker, year_checker). Then will return a final tibble at the end.
 
 ```{r}
 # Main API Query Function
+# Added combined_vars and for loop to validate and check inputted columns are valid
+
 main_query <- function(year = "2022", 
                        geography_level = "All", 
-                       geo_value, 
+                       geography_subset,  
                        get = "SEX,AGEP,PWGTP") {
-    initial_parse <- census_query(year, geography_level, geo_value, get)
+    combined_vars <- c("AGEP", "GASP", "GRPIP", "JWMNP", "PWGTP", "FER", "HHL", "HISPEED", "JWTRNS", "SCH", "SCHL", "SEX", "JWAP", "JWDP")
+    get_list <- strsplit(get, ",")
+    for (i in get_list[[1]]) {
+      if (i %in% combined_vars) {
+        cat("Column (",i ,") entered is valid.")
+      }
+      else (
+        stop("Column (",i,") entered is not valid. Try again")
+            )
+    }
+    initial_parse <- census_query(year, geography_level, geography_subset, get)
     initial_parse <- num_checker(initial_parse)
     initial_parse <- cat_checker(initial_parse)
-    geo_checker(geography_level, geo_value)
+    geo_checker(geography_level, geography_subset)
     year_checker(year) 
     return(initial_parse)
 } 
 
-
 # Testing purposes/example
-test <- main_query("2018,2022,2015", "State", "08", "JWAP,SEX,SCHL,GASP")
+# test <- main_query("2018,2015", "State", "08", "FER,JWAP,SEX,SCHL,GASP")
+ 
+# All variable query
+everything <- main_query("2022", "State", "08", "AGEP,GASP,GRPIP,JWMNP,PWGTP,FER,HHL,HISPEED,JWTRNS,SCH,SCHL,SEX,JWAP,JWDP")
+print(everything)
 ```
 
 ## PART I Obtaining the Data from PUMS API
