@@ -28,7 +28,9 @@ library(jsonlite)
 library(dplyr)
 library(tidycensus)
 library(lubridate)
+library(tibble)
 ```
+## PART I Obtaining the Data from PUMS API
 
 -   Next, we are going to show how URL can interact with the PUMS' API. Typically we'd start with a more bare URL when building a URL from scratch (more on that later), but I ended choosing this one because it provided a more visually appealing output as an example. After setting up the URL and making a GET, request to PUMS' API (a request sent to a server asking an API to provide a service/information), we'll take that raw data, and parse it into JSON. The initial_parse returns a tibble with the column names on the first row, so we extract those names and set them as the column names. Then we drop the first row and print a nice little tibble to get a glimpse of what information the example_url contains (take a look below!). Here we have a small tibble, 6x4, because we used the function head. These are the steps to querying APIs. So in short, we assign a URL, formulate the API request, send it, allow time to handle the response, and process the data.
 
@@ -284,6 +286,7 @@ census_query <- function(year, geography_level, geography_subset, get) {
 
 -   Now we can create our final/main API query. This API query contains 4 parameters (year = "2022", geography_level = "All", geography_subset and get = "SEX,AGEP,PWGTP", with their respective defaults) and takes in vector combined_vars. We create a strsplit for the get results, similarly to what we did for the years in the census_query results. When a user inputs variables, it will check and ensure those column names are valid. If they are then it will print, "Column X entered is valid" and if not then it will tell the user to try again. After that, initial_parse is reassigned and overwritten once it goes through each function (census_query, num_checker, time_checker, cat_checker) and checker (geo_checker, year_checker). Then will return a final tibble at the end.
 
+### API Function
 ```{r}
 # Main API Query Function
 # Added combined_vars and for loop to validate and check inputted columns are valid
@@ -307,6 +310,9 @@ main_query <- function(year = "2022",
     initial_parse <- cat_checker(initial_parse)
     geo_checker(geography_level, geography_subset)
     year_checker(year) 
+    
+    #Add the census class (John this is for summary function in Part II don't delete)
+    class(initial_parse) <-c("census", class(initial_parse))
     return(initial_parse)
 } 
 
@@ -318,9 +324,6 @@ everything <- main_query("2022", "State", "08", "AGEP,GASP,GRPIP,JWMNP,PWGTP,FER
 print(everything)
 ```
 
-## PART I Obtaining the Data from PUMS API
-
-### API Function
 
 ## PART II Summarizing the Data and Plots
 
@@ -328,6 +331,99 @@ print(everything)
 
 -   In this section we have created 2 functions "Summary" function takes the data from tibble and generate summary statistics (mean and standard deviation) for all numeric variables and counts for all categorical variables from the data frame. This function takes three arguments - class census, numeric variables to generate summary statistics and categorical variables.
 
+```{r}
+
+summary.census <- function(object, numeric_vars = NULL, categorical_vars = NULL) {
+  # If no variables specified, get all appropriate variables
+  if (is.null(numeric_vars)) {
+    numeric_vars <- names(object)[sapply(object, is.numeric)]
+    numeric_vars <- setdiff(numeric_vars, "PWGTP")  # Exclude weight variable
+  }
+  
+  if (is.null(categorical_vars)) {
+    categorical_vars <- names(object)[sapply(object, function(x) 
+      is.character(x) || is.factor(x))]
+  }
+  
+  # Ensure JWAP and JWDP are in numeric_vars and not in categorical_vars
+  numeric_vars <- union(numeric_vars, c("JWAP", "JWDP"))
+  categorical_vars <- setdiff(categorical_vars, c("JWAP", "JWDP"))
+  
+  # Initialize results list
+  results <- list()
+  
+  # Calculate weighted means and standard deviations for numeric variables
+  if (length(numeric_vars) > 0) {
+    numeric_summary <- list()
+    
+    for (var in numeric_vars) {
+      # Get the variable and weights
+      x <- object[[var]]
+      w <- object[["PWGTP"]]
+      
+      # Calculate weighted mean
+      weighted_mean <- sum(x * w) / sum(w)
+      
+      # Calculate weighted standard deviation
+      weighted_sd <- sqrt(sum(x^2 * w) / sum(w) - weighted_mean^2)
+      
+      # Store results
+      numeric_summary[[var]] <- list(
+        mean = weighted_mean,
+        sd = weighted_sd
+      )
+    }
+    
+    results[["numeric_summary"]] <- numeric_summary
+  }
+  
+  # Calculate counts for categorical variables
+  if (length(categorical_vars) > 0) {
+    categorical_summary <- list()
+    
+    for (var in categorical_vars) {
+      # Get counts
+      counts <- table(object[[var]])
+      categorical_summary[[var]] <- counts
+    }
+    
+    results[["categorical_summary"]] <- categorical_summary
+  }
+  
+  return(results)
+}
+
+
+```
+
+Now Let's test our summary function
+
+```{r}
+
+# Using default behavior (all variables)
+results <- summary(everything)
+head(results)
+```
+
+We can use specific variables and check if we can generate the summary 
+for examples we can select few numeric variables and few categorical variables as follows
+
+```{r}
+
+# Specifying specific variables
+results <- summary(initial_parse, 
+                  numeric_vars = c("age", "income"),
+                  categorical_vars = c("sex", "race"))
+```
+
+Let's access our results 
+
+```{r}
+# Access results
+results$numeric_summary$age$mean
+results$categorical_summary$sex
+```
+
+
 ### Plot Function
 
--   test this
