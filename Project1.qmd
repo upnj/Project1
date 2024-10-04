@@ -334,9 +334,14 @@ print(everything)
 ```{r}
 
 summary.census <- function(object, numeric_vars = NULL, categorical_vars = NULL) {
+  
+  #convert JWAP and JWDP into numeric variables
+  object$JWAP <- as.numeric(object$JWAP)
+  object$JWDP <- as.numeric(object$JWDP)
+  
   # If no variables specified, get all appropriate variables
   if (is.null(numeric_vars)) {
-    numeric_vars <- names(object)[sapply(object, is.numeric)]
+    numeric_vars <- c(names(object)[sapply(object, is.numeric)], "JWAP", "JWDP")
     numeric_vars <- setdiff(numeric_vars, "PWGTP")  # Exclude weight variable
   }
   
@@ -352,6 +357,23 @@ summary.census <- function(object, numeric_vars = NULL, categorical_vars = NULL)
   # Initialize results list
   results <- list()
   
+  # Define labels for all variables
+  variable_labels <- list(
+    AGEP = "Age",
+    JWMNP = "Travel time to work",
+    GRPIP = "Gross rent as a percentage of household income",
+    GASP = "Gasoline cost (monthly)",
+    FER = "Gave birth to child within the past 12 months",
+    SEX = "Sex",
+    SCH = "School enrollment",
+    SCHL = "Educational attainment",
+    HHL = "Household language",
+    HISPEED = "High speed internet",
+    JWTRNS = "Means of transportation to work",
+    JWAP = "Time of arrival at work",
+    JWDP = "Time of departure for work"
+  )
+  
   # Calculate weighted means and standard deviations for numeric variables
   if (length(numeric_vars) > 0) {
     numeric_summary <- list()
@@ -361,14 +383,22 @@ summary.census <- function(object, numeric_vars = NULL, categorical_vars = NULL)
       x <- object[[var]]
       w <- object[["PWGTP"]]
       
+      # Remove NA and infinite values
+      valid <- !is.na(x) & !is.infinite(x) & !is.na(w) & !is.infinite(w)
+      x <- x[valid]
+      w <- w[valid]
+      
       # Calculate weighted mean
       weighted_mean <- sum(x * w) / sum(w)
       
       # Calculate weighted standard deviation
       weighted_sd <- sqrt(sum(x^2 * w) / sum(w) - weighted_mean^2)
       
+      # Get label for the variable
+      label <- if (var %in% names(variable_labels)) variable_labels[[var]] else var
+      
       # Store results
-      numeric_summary[[var]] <- list(
+      numeric_summary[[label]] <- list(
         mean = weighted_mean,
         sd = weighted_sd
       )
@@ -381,10 +411,80 @@ summary.census <- function(object, numeric_vars = NULL, categorical_vars = NULL)
   if (length(categorical_vars) > 0) {
     categorical_summary <- list()
     
+    # Define mappings for categorical variables
+    category_mappings <- list(
+      FER = c("0" = "N/A", "1" = "Yes", "2" = "No"),
+      SEX = c("1" = "Male", "2" = "Female"),
+      SCHL = c("01" = "No schooling completed",
+               "02" = "Nursery school, preschool",
+               "03" = "Kindergarten",
+               "04" = "Grade 1",
+               "05" = "Grade 2",
+               "06" = "Grade 3",
+               "07" = "Grade 4",
+               "08" = "Grade 5",
+               "09" = "Grade 6",
+               "10" = "Grade 7",
+               "11" = "Grade 8",
+               "12" = "Grade 9",
+               "13" = "Grade 10",
+               "14" = "Grade 11",
+               "15" = "12th grade - no diploma",
+               "16" = "Regular high school diploma",
+               "17" = "GED or alternative credential",
+               "18" = "Some college, but less than 1 year",
+               "19" = "1 or more years of college credit, no degree",
+               "20" = "Associate's degree",
+               "21" = "Bachelor's degree",
+               "22" = "Master's degree",
+               "23" = "Professional degree beyond a bachelor's degree",
+               "24" = "Doctorate degree"),
+      HHL = c("0" = "N/A (GQ/vacant)",
+              "1" = "English Only",
+              "2" = "Spanish",
+              "3" = "Other Indo-European languages",
+              "4" = "Asian and Pacific Island languages",
+              "5" = "Other Language"),
+      HISPEED = c("0" = "N/A (GQ/vacant/no paid access to the internet)",
+                  "1" =  "Yes",
+                  "2" = "No"),
+      JWTRNS = c("0" = "N/A",
+                 "10" = "Walked",
+                 "11" = "Worked from home",
+                 "12" = "Other method",
+                 "07" = "Taxicab",
+                 "02" = "Bus",
+                 "05" = "Light rail, streetcar, or trolley",
+                 "04" = "Long-distance train or commuter rail",
+                 "09" = "Bicycle",
+                 "01" = "Car, truck, or van",
+                 "03" = "Subway or elevated rail",
+                 "06" = "Ferryboat",
+                 "08" = "Motorcycle"),
+      SCH = c("0" = "N/A (less than 3 years old)",
+              "1" = "No, has not attended in the last 3 months",
+              "2" = "Yes, public school or public college",
+              "3" = "Yes, private school or college or home school")
+    )
+    
     for (var in categorical_vars) {
       # Get counts
       counts <- table(object[[var]])
-      categorical_summary[[var]] <- counts
+      
+      # Apply mapping if available
+      if (var %in% names(category_mappings)) {
+        mapped_counts <- counts
+        names(mapped_counts) <- category_mappings[[var]][names(counts)]
+        counts_to_use <- mapped_counts
+      } else {
+        counts_to_use <- counts
+      }
+      
+      # Get label for the variable
+      label <- if (var %in% names(variable_labels)) variable_labels[[var]] else var
+      
+      # Store results with label
+      categorical_summary[[label]] <- counts_to_use
     }
     
     results[["categorical_summary"]] <- categorical_summary
@@ -393,7 +493,6 @@ summary.census <- function(object, numeric_vars = NULL, categorical_vars = NULL)
   return(results)
 }
 
-
 ```
 
 Now Let's test our summary function
@@ -401,8 +500,9 @@ Now Let's test our summary function
 ```{r}
 
 # Using default behavior (all variables)
-results <- summary(everything)
-head(results)
+results1 <- summary.census(everything)
+head(results1)
+str(results1)
 ```
 
 We can use specific variables and check if we can generate the summary 
@@ -411,17 +511,19 @@ for examples we can select few numeric variables and few categorical variables a
 ```{r}
 
 # Specifying specific variables
-results <- summary(initial_parse, 
+results <- summary.census(everything, 
                   numeric_vars = c("age", "income"),
                   categorical_vars = c("sex", "race"))
+
+head(results)
 ```
 
 Let's access our results 
 
 ```{r}
 # Access results
-results$numeric_summary$age$mean
-results$categorical_summary$sex
+results1$numeric_summary$age$mean
+results1$categorical_summary$sex
 ```
 
 
