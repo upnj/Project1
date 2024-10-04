@@ -17,6 +17,7 @@ editor_options:
 
 ```{r}
 # Loading packages
+#install.packages("quantreg")
 library(tidyverse)
 library(httr)
 library(jsonlite)
@@ -524,3 +525,57 @@ results1$categorical_summary$Sex
 
 ### Plot Function
 
+```{r}
+library(ggplot2)
+
+plot.census <- function(x, cat_var, num_var, ...) {
+  # Check if the object is of class "census"
+  if (!inherits(x, "census")) {
+    stop("This function only works for objects of class 'census'")
+  }
+  
+  # Check if cat_var and num_var are provided
+  if (missing(cat_var) || missing(num_var)) {
+    stop("Both cat_var and num_var must be specified")
+  }
+  
+  # Check if cat_var and num_var exist in the data
+  if (!cat_var %in% names(x)) {
+    stop(paste("Categorical variable", cat_var, "not found in the data"))
+  }
+  if (!num_var %in% names(x)) {
+    stop(paste("Numeric variable", num_var, "not found in the data"))
+  }
+  
+  # Check if cat_var is categorical (factor or character)
+  if (!is.factor(x[[cat_var]]) && !is.character(x[[cat_var]])) {
+    stop(paste(cat_var, "must be a categorical variable (factor or character)"))
+  }
+  
+  # Check if num_var is numeric
+  if (!is.numeric(x[[num_var]])) {
+    stop(paste(num_var, "must be a numeric variable"))
+  }
+  
+  # Create the plot
+  p <- ggplot(x, aes(x = .data[[cat_var]], y = .data[[num_var]], weight = PWGTP)) +
+    geom_boxplot() +
+    labs(x = cat_var, y = num_var, title = paste("Weighted Boxplot of", num_var, "by", cat_var)) +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  
+  # Print the plot
+  print(p)
+  
+  # Return the plot object invisibly
+  invisible(p)
+}
+```
+
+Let's test the plot function
+
+```{r}
+
+
+plot(everything, cat_var = "SEX", num_var = "AGEP")
+```
