@@ -2,13 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.57">
+<meta name="generator" content="quarto-1.5.56">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Upendra Joshi &amp; John Tuong">
 
-<title>Project1</title>
+<title>ST: 558, Project 1</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -117,7 +117,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Project1</h1>
+<h1 class="title">ST: 558, Project 1</h1>
 </div>
 
 
@@ -140,13 +140,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="st-558-project-1" class="level1">
-<h1>ST: 558, Project 1</h1>
-<section id="by-upendra-joshi-john-tuong" class="level3">
-<h3 class="anchored" data-anchor-id="by-upendra-joshi-john-tuong">By Upendra Joshi &amp; John Tuong</h3>
-</section>
-<section id="introduction" class="level2">
-<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
 <ul>
 <li><p>The Public Use Microdata Sample (PUMS) Census API (Application Programming Interface) is a collection of data files from the United States Census Bureau that provides access to data samples of the U.S. population and housing units. More specifically, these PUMS data sets cover the HUD’s (U.S. Department of Housing and Urban Development) largest rental assistance programs (Public Housing, Section 8, etc). This data is compiled from responses to the American Community Surveys (ACS). The PUMS is comprised of two files: one for person records and the other for housing unit records. It includes geographic and household information including, but not limited to: family type, household income, race, gender, etc. The PUMS’ data sets are valuable sources of information to policymakers and the researchers, as it can give some insight on how to better allocate resources and focus on helping those who need it the most.</p></li>
 <li><p>By leveraging these data sets, we hope to not only grow our R skills, but to learn a little more about the world around us. For the first half, we’ll be working on building functions, both helper and main functions, that will help us examine, check, process, manipulate, and build our main function to query PUMS’ API. The second half of the project will build onto the first and delve into functions to that will summarize data and create visuals.</p></li>
@@ -159,8 +154,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(jsonlite)</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidycensus)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tibble)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<section id="part-i-obtaining-the-data-from-pums-api" class="level2">
+<h2 class="anchored" data-anchor-id="part-i-obtaining-the-data-from-pums-api">PART I Obtaining the Data from PUMS API</h2>
 <ul>
 <li>Next, we are going to show how URL can interact with the PUMS’ API. Typically we’d start with a more bare URL when building a URL from scratch (more on that later), but I ended choosing this one because it provided a more visually appealing output as an example. After setting up the URL and making a GET, request to PUMS’ API (a request sent to a server asking an API to provide a service/information), we’ll take that raw data, and parse it into JSON. The initial_parse returns a tibble with the column names on the first row, so we extract those names and set them as the column names. Then we drop the first row and print a nice little tibble to get a glimpse of what information the example_url contains (take a look below!). Here we have a small tibble, 6x4, because we used the function head. These are the steps to querying APIs. So in short, we assign a URL, formulate the API request, send it, allow time to handle the response, and process the data.</li>
 </ul>
@@ -423,6 +421,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li>Now we can create our final/main API query. This API query contains 4 parameters (year = “2022”, geography_level = “All”, geography_subset and get = “SEX,AGEP,PWGTP”, with their respective defaults) and takes in vector combined_vars. We create a strsplit for the get results, similarly to what we did for the years in the census_query results. When a user inputs variables, it will check and ensure those column names are valid. If they are then it will print, “Column X entered is valid” and if not then it will tell the user to try again. After that, initial_parse is reassigned and overwritten once it goes through each function (census_query, num_checker, time_checker, cat_checker) and checker (geo_checker, year_checker). Then will return a final tibble at the end.</li>
 </ul>
+<section id="api-function" class="level3">
+<h3 class="anchored" data-anchor-id="api-function">API Function</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Main API Query Function</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Added combined_vars and for loop to validate and check inputted columns are valid</span></span>
@@ -446,14 +446,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>    initial_parse <span class="ot">&lt;-</span> <span class="fu">cat_checker</span>(initial_parse)</span>
 <span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geo_checker</span>(geography_level, geography_subset)</span>
 <span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">year_checker</span>(year) </span>
-<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(initial_parse)</span>
-<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>} </span>
-<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Testing purposes/example</span></span>
-<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a><span class="co"># test &lt;- main_query("2018,2015", "State", "08", "FER,JWAP,SEX,SCHL,GASP")</span></span>
-<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a><span class="co"># All variable query</span></span>
-<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>everything <span class="ot">&lt;-</span> <span class="fu">main_query</span>(<span class="st">"2022"</span>, <span class="st">"State"</span>, <span class="st">"08"</span>, <span class="st">"AGEP,GASP,GRPIP,JWMNP,PWGTP,FER,HHL,HISPEED,JWTRNS,SCH,SCHL,SEX,JWAP,JWDP"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Add the census class (John this is for summary function in Part II don't delete)</span></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">class</span>(initial_parse) <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"census"</span>, <span class="fu">class</span>(initial_parse))</span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(initial_parse)</span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>} </span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Testing purposes/example</span></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a><span class="co"># test &lt;- main_query("2018,2015", "State", "08", "FER,JWAP,SEX,SCHL,GASP")</span></span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a><span class="co"># All variable query</span></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>everything <span class="ot">&lt;-</span> <span class="fu">main_query</span>(<span class="st">"2022"</span>, <span class="st">"State"</span>, <span class="st">"08"</span>, <span class="st">"AGEP,GASP,GRPIP,JWMNP,PWGTP,FER,HHL,HISPEED,JWTRNS,SCH,SCHL,SEX,JWAP,JWDP"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Column ( AGEP ) entered is valid.Column ( GASP ) entered is valid.Column ( GRPIP ) entered is valid.Column ( JWMNP ) entered is valid.Column ( PWGTP ) entered is valid.Column ( FER ) entered is valid.Column ( HHL ) entered is valid.Column ( HISPEED ) entered is valid.Column ( JWTRNS ) entered is valid.Column ( SCH ) entered is valid.Column ( SCHL ) entered is valid.Column ( SEX ) entered is valid.Column ( JWAP ) entered is valid.Column ( JWDP ) entered is valid.[1] "PWGTP"
 [1] "GASP"
@@ -491,11 +494,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="part-i-obtaining-the-data-from-pums-api" class="level2">
-<h2 class="anchored" data-anchor-id="part-i-obtaining-the-data-from-pums-api">PART I Obtaining the Data from PUMS API</h2>
-<section id="api-function" class="level3">
-<h3 class="anchored" data-anchor-id="api-function">API Function</h3>
-</section>
 </section>
 <section id="part-ii-summarizing-the-data-and-plots" class="level2">
 <h2 class="anchored" data-anchor-id="part-ii-summarizing-the-data-and-plots">PART II Summarizing the Data and Plots</h2>
@@ -504,12 +502,395 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li>In this section we have created 2 functions “Summary” function takes the data from tibble and generate summary statistics (mean and standard deviation) for all numeric variables and counts for all categorical variables from the data frame. This function takes three arguments - class census, numeric variables to generate summary statistics and categorical variables.</li>
 </ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>summary.census <span class="ot">&lt;-</span> <span class="cf">function</span>(object, <span class="at">numeric_vars =</span> <span class="cn">NULL</span>, <span class="at">categorical_vars =</span> <span class="cn">NULL</span>) {</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#convert JWAP and JWDP into numeric variables</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  object<span class="sc">$</span>JWAP <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(object<span class="sc">$</span>JWAP)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  object<span class="sc">$</span>JWDP <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(object<span class="sc">$</span>JWDP)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># If no variables specified, get all appropriate variables</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(numeric_vars)) {</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    numeric_vars <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">names</span>(object)[<span class="fu">sapply</span>(object, is.numeric)], <span class="st">"JWAP"</span>, <span class="st">"JWDP"</span>)</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    numeric_vars <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(numeric_vars, <span class="st">"PWGTP"</span>)  <span class="co"># Exclude weight variable</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(categorical_vars)) {</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    categorical_vars <span class="ot">&lt;-</span> <span class="fu">names</span>(object)[<span class="fu">sapply</span>(object, <span class="cf">function</span>(x) </span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>      <span class="fu">is.character</span>(x) <span class="sc">||</span> <span class="fu">is.factor</span>(x))]</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Ensure JWAP and JWDP are in numeric_vars and not in categorical_vars</span></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>  numeric_vars <span class="ot">&lt;-</span> <span class="fu">union</span>(numeric_vars, <span class="fu">c</span>(<span class="st">"JWAP"</span>, <span class="st">"JWDP"</span>))</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>  categorical_vars <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(categorical_vars, <span class="fu">c</span>(<span class="st">"JWAP"</span>, <span class="st">"JWDP"</span>))</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Initialize results list</span></span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>  results <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Define labels for all variables</span></span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>  variable_labels <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">AGEP =</span> <span class="st">"Age"</span>,</span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">JWMNP =</span> <span class="st">"Travel time to work"</span>,</span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">GRPIP =</span> <span class="st">"Gross rent as a percentage of household income"</span>,</span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">GASP =</span> <span class="st">"Gasoline cost (monthly)"</span>,</span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">FER =</span> <span class="st">"Gave birth to child within the past 12 months"</span>,</span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">SEX =</span> <span class="st">"Sex"</span>,</span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">SCH =</span> <span class="st">"School enrollment"</span>,</span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">SCHL =</span> <span class="st">"Educational attainment"</span>,</span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">HHL =</span> <span class="st">"Household language"</span>,</span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">HISPEED =</span> <span class="st">"High speed internet"</span>,</span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">JWTRNS =</span> <span class="st">"Means of transportation to work"</span>,</span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">JWAP =</span> <span class="st">"Time of arrival at work"</span>,</span>
+<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">JWDP =</span> <span class="st">"Time of departure for work"</span></span>
+<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-42"><a href="#cb15-42" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate weighted means and standard deviations for numeric variables</span></span>
+<span id="cb15-43"><a href="#cb15-43" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">length</span>(numeric_vars) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb15-44"><a href="#cb15-44" aria-hidden="true" tabindex="-1"></a>    numeric_summary <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb15-45"><a href="#cb15-45" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb15-46"><a href="#cb15-46" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (var <span class="cf">in</span> numeric_vars) {</span>
+<span id="cb15-47"><a href="#cb15-47" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Get the variable and weights</span></span>
+<span id="cb15-48"><a href="#cb15-48" aria-hidden="true" tabindex="-1"></a>      x <span class="ot">&lt;-</span> object[[var]]</span>
+<span id="cb15-49"><a href="#cb15-49" aria-hidden="true" tabindex="-1"></a>      w <span class="ot">&lt;-</span> object[[<span class="st">"PWGTP"</span>]]</span>
+<span id="cb15-50"><a href="#cb15-50" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb15-51"><a href="#cb15-51" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Remove NA and infinite values</span></span>
+<span id="cb15-52"><a href="#cb15-52" aria-hidden="true" tabindex="-1"></a>      valid <span class="ot">&lt;-</span> <span class="sc">!</span><span class="fu">is.na</span>(x) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.infinite</span>(x) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(w) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.infinite</span>(w)</span>
+<span id="cb15-53"><a href="#cb15-53" aria-hidden="true" tabindex="-1"></a>      x <span class="ot">&lt;-</span> x[valid]</span>
+<span id="cb15-54"><a href="#cb15-54" aria-hidden="true" tabindex="-1"></a>      w <span class="ot">&lt;-</span> w[valid]</span>
+<span id="cb15-55"><a href="#cb15-55" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb15-56"><a href="#cb15-56" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Calculate weighted mean</span></span>
+<span id="cb15-57"><a href="#cb15-57" aria-hidden="true" tabindex="-1"></a>      weighted_mean <span class="ot">&lt;-</span> <span class="fu">sum</span>(x <span class="sc">*</span> w) <span class="sc">/</span> <span class="fu">sum</span>(w)</span>
+<span id="cb15-58"><a href="#cb15-58" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb15-59"><a href="#cb15-59" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Calculate weighted standard deviation</span></span>
+<span id="cb15-60"><a href="#cb15-60" aria-hidden="true" tabindex="-1"></a>      weighted_sd <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>(x<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> w) <span class="sc">/</span> <span class="fu">sum</span>(w) <span class="sc">-</span> weighted_mean<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb15-61"><a href="#cb15-61" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb15-62"><a href="#cb15-62" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Get label for the variable</span></span>
+<span id="cb15-63"><a href="#cb15-63" aria-hidden="true" tabindex="-1"></a>      label <span class="ot">&lt;-</span> <span class="cf">if</span> (var <span class="sc">%in%</span> <span class="fu">names</span>(variable_labels)) variable_labels[[var]] <span class="cf">else</span> var</span>
+<span id="cb15-64"><a href="#cb15-64" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb15-65"><a href="#cb15-65" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Store results</span></span>
+<span id="cb15-66"><a href="#cb15-66" aria-hidden="true" tabindex="-1"></a>      numeric_summary[[label]] <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb15-67"><a href="#cb15-67" aria-hidden="true" tabindex="-1"></a>        <span class="at">mean =</span> weighted_mean,</span>
+<span id="cb15-68"><a href="#cb15-68" aria-hidden="true" tabindex="-1"></a>        <span class="at">sd =</span> weighted_sd</span>
+<span id="cb15-69"><a href="#cb15-69" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb15-70"><a href="#cb15-70" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb15-71"><a href="#cb15-71" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb15-72"><a href="#cb15-72" aria-hidden="true" tabindex="-1"></a>    results[[<span class="st">"numeric_summary"</span>]] <span class="ot">&lt;-</span> numeric_summary</span>
+<span id="cb15-73"><a href="#cb15-73" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb15-74"><a href="#cb15-74" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-75"><a href="#cb15-75" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate counts for categorical variables</span></span>
+<span id="cb15-76"><a href="#cb15-76" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">length</span>(categorical_vars) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb15-77"><a href="#cb15-77" aria-hidden="true" tabindex="-1"></a>    categorical_summary <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb15-78"><a href="#cb15-78" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb15-79"><a href="#cb15-79" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Define mappings for categorical variables</span></span>
+<span id="cb15-80"><a href="#cb15-80" aria-hidden="true" tabindex="-1"></a>    category_mappings <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb15-81"><a href="#cb15-81" aria-hidden="true" tabindex="-1"></a>      <span class="at">FER =</span> <span class="fu">c</span>(<span class="st">"0"</span> <span class="ot">=</span> <span class="st">"N/A"</span>, <span class="st">"1"</span> <span class="ot">=</span> <span class="st">"Yes"</span>, <span class="st">"2"</span> <span class="ot">=</span> <span class="st">"No"</span>),</span>
+<span id="cb15-82"><a href="#cb15-82" aria-hidden="true" tabindex="-1"></a>      <span class="at">SEX =</span> <span class="fu">c</span>(<span class="st">"1"</span> <span class="ot">=</span> <span class="st">"Male"</span>, <span class="st">"2"</span> <span class="ot">=</span> <span class="st">"Female"</span>),</span>
+<span id="cb15-83"><a href="#cb15-83" aria-hidden="true" tabindex="-1"></a>      <span class="at">SCHL =</span> <span class="fu">c</span>(<span class="st">"01"</span> <span class="ot">=</span> <span class="st">"No schooling completed"</span>,</span>
+<span id="cb15-84"><a href="#cb15-84" aria-hidden="true" tabindex="-1"></a>               <span class="st">"02"</span> <span class="ot">=</span> <span class="st">"Nursery school, preschool"</span>,</span>
+<span id="cb15-85"><a href="#cb15-85" aria-hidden="true" tabindex="-1"></a>               <span class="st">"03"</span> <span class="ot">=</span> <span class="st">"Kindergarten"</span>,</span>
+<span id="cb15-86"><a href="#cb15-86" aria-hidden="true" tabindex="-1"></a>               <span class="st">"04"</span> <span class="ot">=</span> <span class="st">"Grade 1"</span>,</span>
+<span id="cb15-87"><a href="#cb15-87" aria-hidden="true" tabindex="-1"></a>               <span class="st">"05"</span> <span class="ot">=</span> <span class="st">"Grade 2"</span>,</span>
+<span id="cb15-88"><a href="#cb15-88" aria-hidden="true" tabindex="-1"></a>               <span class="st">"06"</span> <span class="ot">=</span> <span class="st">"Grade 3"</span>,</span>
+<span id="cb15-89"><a href="#cb15-89" aria-hidden="true" tabindex="-1"></a>               <span class="st">"07"</span> <span class="ot">=</span> <span class="st">"Grade 4"</span>,</span>
+<span id="cb15-90"><a href="#cb15-90" aria-hidden="true" tabindex="-1"></a>               <span class="st">"08"</span> <span class="ot">=</span> <span class="st">"Grade 5"</span>,</span>
+<span id="cb15-91"><a href="#cb15-91" aria-hidden="true" tabindex="-1"></a>               <span class="st">"09"</span> <span class="ot">=</span> <span class="st">"Grade 6"</span>,</span>
+<span id="cb15-92"><a href="#cb15-92" aria-hidden="true" tabindex="-1"></a>               <span class="st">"10"</span> <span class="ot">=</span> <span class="st">"Grade 7"</span>,</span>
+<span id="cb15-93"><a href="#cb15-93" aria-hidden="true" tabindex="-1"></a>               <span class="st">"11"</span> <span class="ot">=</span> <span class="st">"Grade 8"</span>,</span>
+<span id="cb15-94"><a href="#cb15-94" aria-hidden="true" tabindex="-1"></a>               <span class="st">"12"</span> <span class="ot">=</span> <span class="st">"Grade 9"</span>,</span>
+<span id="cb15-95"><a href="#cb15-95" aria-hidden="true" tabindex="-1"></a>               <span class="st">"13"</span> <span class="ot">=</span> <span class="st">"Grade 10"</span>,</span>
+<span id="cb15-96"><a href="#cb15-96" aria-hidden="true" tabindex="-1"></a>               <span class="st">"14"</span> <span class="ot">=</span> <span class="st">"Grade 11"</span>,</span>
+<span id="cb15-97"><a href="#cb15-97" aria-hidden="true" tabindex="-1"></a>               <span class="st">"15"</span> <span class="ot">=</span> <span class="st">"12th grade - no diploma"</span>,</span>
+<span id="cb15-98"><a href="#cb15-98" aria-hidden="true" tabindex="-1"></a>               <span class="st">"16"</span> <span class="ot">=</span> <span class="st">"Regular high school diploma"</span>,</span>
+<span id="cb15-99"><a href="#cb15-99" aria-hidden="true" tabindex="-1"></a>               <span class="st">"17"</span> <span class="ot">=</span> <span class="st">"GED or alternative credential"</span>,</span>
+<span id="cb15-100"><a href="#cb15-100" aria-hidden="true" tabindex="-1"></a>               <span class="st">"18"</span> <span class="ot">=</span> <span class="st">"Some college, but less than 1 year"</span>,</span>
+<span id="cb15-101"><a href="#cb15-101" aria-hidden="true" tabindex="-1"></a>               <span class="st">"19"</span> <span class="ot">=</span> <span class="st">"1 or more years of college credit, no degree"</span>,</span>
+<span id="cb15-102"><a href="#cb15-102" aria-hidden="true" tabindex="-1"></a>               <span class="st">"20"</span> <span class="ot">=</span> <span class="st">"Associate's degree"</span>,</span>
+<span id="cb15-103"><a href="#cb15-103" aria-hidden="true" tabindex="-1"></a>               <span class="st">"21"</span> <span class="ot">=</span> <span class="st">"Bachelor's degree"</span>,</span>
+<span id="cb15-104"><a href="#cb15-104" aria-hidden="true" tabindex="-1"></a>               <span class="st">"22"</span> <span class="ot">=</span> <span class="st">"Master's degree"</span>,</span>
+<span id="cb15-105"><a href="#cb15-105" aria-hidden="true" tabindex="-1"></a>               <span class="st">"23"</span> <span class="ot">=</span> <span class="st">"Professional degree beyond a bachelor's degree"</span>,</span>
+<span id="cb15-106"><a href="#cb15-106" aria-hidden="true" tabindex="-1"></a>               <span class="st">"24"</span> <span class="ot">=</span> <span class="st">"Doctorate degree"</span>),</span>
+<span id="cb15-107"><a href="#cb15-107" aria-hidden="true" tabindex="-1"></a>      <span class="at">HHL =</span> <span class="fu">c</span>(<span class="st">"0"</span> <span class="ot">=</span> <span class="st">"N/A (GQ/vacant)"</span>,</span>
+<span id="cb15-108"><a href="#cb15-108" aria-hidden="true" tabindex="-1"></a>              <span class="st">"1"</span> <span class="ot">=</span> <span class="st">"English Only"</span>,</span>
+<span id="cb15-109"><a href="#cb15-109" aria-hidden="true" tabindex="-1"></a>              <span class="st">"2"</span> <span class="ot">=</span> <span class="st">"Spanish"</span>,</span>
+<span id="cb15-110"><a href="#cb15-110" aria-hidden="true" tabindex="-1"></a>              <span class="st">"3"</span> <span class="ot">=</span> <span class="st">"Other Indo-European languages"</span>,</span>
+<span id="cb15-111"><a href="#cb15-111" aria-hidden="true" tabindex="-1"></a>              <span class="st">"4"</span> <span class="ot">=</span> <span class="st">"Asian and Pacific Island languages"</span>,</span>
+<span id="cb15-112"><a href="#cb15-112" aria-hidden="true" tabindex="-1"></a>              <span class="st">"5"</span> <span class="ot">=</span> <span class="st">"Other Language"</span>),</span>
+<span id="cb15-113"><a href="#cb15-113" aria-hidden="true" tabindex="-1"></a>      <span class="at">HISPEED =</span> <span class="fu">c</span>(<span class="st">"0"</span> <span class="ot">=</span> <span class="st">"N/A (GQ/vacant/no paid access to the internet)"</span>,</span>
+<span id="cb15-114"><a href="#cb15-114" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"1"</span> <span class="ot">=</span>  <span class="st">"Yes"</span>,</span>
+<span id="cb15-115"><a href="#cb15-115" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"2"</span> <span class="ot">=</span> <span class="st">"No"</span>),</span>
+<span id="cb15-116"><a href="#cb15-116" aria-hidden="true" tabindex="-1"></a>      <span class="at">JWTRNS =</span> <span class="fu">c</span>(<span class="st">"0"</span> <span class="ot">=</span> <span class="st">"N/A"</span>,</span>
+<span id="cb15-117"><a href="#cb15-117" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"10"</span> <span class="ot">=</span> <span class="st">"Walked"</span>,</span>
+<span id="cb15-118"><a href="#cb15-118" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"11"</span> <span class="ot">=</span> <span class="st">"Worked from home"</span>,</span>
+<span id="cb15-119"><a href="#cb15-119" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"12"</span> <span class="ot">=</span> <span class="st">"Other method"</span>,</span>
+<span id="cb15-120"><a href="#cb15-120" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"07"</span> <span class="ot">=</span> <span class="st">"Taxicab"</span>,</span>
+<span id="cb15-121"><a href="#cb15-121" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"02"</span> <span class="ot">=</span> <span class="st">"Bus"</span>,</span>
+<span id="cb15-122"><a href="#cb15-122" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"05"</span> <span class="ot">=</span> <span class="st">"Light rail, streetcar, or trolley"</span>,</span>
+<span id="cb15-123"><a href="#cb15-123" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"04"</span> <span class="ot">=</span> <span class="st">"Long-distance train or commuter rail"</span>,</span>
+<span id="cb15-124"><a href="#cb15-124" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"09"</span> <span class="ot">=</span> <span class="st">"Bicycle"</span>,</span>
+<span id="cb15-125"><a href="#cb15-125" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"01"</span> <span class="ot">=</span> <span class="st">"Car, truck, or van"</span>,</span>
+<span id="cb15-126"><a href="#cb15-126" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"03"</span> <span class="ot">=</span> <span class="st">"Subway or elevated rail"</span>,</span>
+<span id="cb15-127"><a href="#cb15-127" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"06"</span> <span class="ot">=</span> <span class="st">"Ferryboat"</span>,</span>
+<span id="cb15-128"><a href="#cb15-128" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"08"</span> <span class="ot">=</span> <span class="st">"Motorcycle"</span>),</span>
+<span id="cb15-129"><a href="#cb15-129" aria-hidden="true" tabindex="-1"></a>      <span class="at">SCH =</span> <span class="fu">c</span>(<span class="st">"0"</span> <span class="ot">=</span> <span class="st">"N/A (less than 3 years old)"</span>,</span>
+<span id="cb15-130"><a href="#cb15-130" aria-hidden="true" tabindex="-1"></a>              <span class="st">"1"</span> <span class="ot">=</span> <span class="st">"No, has not attended in the last 3 months"</span>,</span>
+<span id="cb15-131"><a href="#cb15-131" aria-hidden="true" tabindex="-1"></a>              <span class="st">"2"</span> <span class="ot">=</span> <span class="st">"Yes, public school or public college"</span>,</span>
+<span id="cb15-132"><a href="#cb15-132" aria-hidden="true" tabindex="-1"></a>              <span class="st">"3"</span> <span class="ot">=</span> <span class="st">"Yes, private school or college or home school"</span>)</span>
+<span id="cb15-133"><a href="#cb15-133" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb15-134"><a href="#cb15-134" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb15-135"><a href="#cb15-135" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (var <span class="cf">in</span> categorical_vars) {</span>
+<span id="cb15-136"><a href="#cb15-136" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Get counts</span></span>
+<span id="cb15-137"><a href="#cb15-137" aria-hidden="true" tabindex="-1"></a>      counts <span class="ot">&lt;-</span> <span class="fu">table</span>(object[[var]])</span>
+<span id="cb15-138"><a href="#cb15-138" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb15-139"><a href="#cb15-139" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Apply mapping if available</span></span>
+<span id="cb15-140"><a href="#cb15-140" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (var <span class="sc">%in%</span> <span class="fu">names</span>(category_mappings)) {</span>
+<span id="cb15-141"><a href="#cb15-141" aria-hidden="true" tabindex="-1"></a>        mapped_counts <span class="ot">&lt;-</span> counts</span>
+<span id="cb15-142"><a href="#cb15-142" aria-hidden="true" tabindex="-1"></a>        <span class="fu">names</span>(mapped_counts) <span class="ot">&lt;-</span> category_mappings[[var]][<span class="fu">names</span>(counts)]</span>
+<span id="cb15-143"><a href="#cb15-143" aria-hidden="true" tabindex="-1"></a>        counts_to_use <span class="ot">&lt;-</span> mapped_counts</span>
+<span id="cb15-144"><a href="#cb15-144" aria-hidden="true" tabindex="-1"></a>      } <span class="cf">else</span> {</span>
+<span id="cb15-145"><a href="#cb15-145" aria-hidden="true" tabindex="-1"></a>        counts_to_use <span class="ot">&lt;-</span> counts</span>
+<span id="cb15-146"><a href="#cb15-146" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb15-147"><a href="#cb15-147" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb15-148"><a href="#cb15-148" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Get label for the variable</span></span>
+<span id="cb15-149"><a href="#cb15-149" aria-hidden="true" tabindex="-1"></a>      label <span class="ot">&lt;-</span> <span class="cf">if</span> (var <span class="sc">%in%</span> <span class="fu">names</span>(variable_labels)) variable_labels[[var]] <span class="cf">else</span> var</span>
+<span id="cb15-150"><a href="#cb15-150" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb15-151"><a href="#cb15-151" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Store results with label</span></span>
+<span id="cb15-152"><a href="#cb15-152" aria-hidden="true" tabindex="-1"></a>      categorical_summary[[label]] <span class="ot">&lt;-</span> counts_to_use</span>
+<span id="cb15-153"><a href="#cb15-153" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb15-154"><a href="#cb15-154" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb15-155"><a href="#cb15-155" aria-hidden="true" tabindex="-1"></a>    results[[<span class="st">"categorical_summary"</span>]] <span class="ot">&lt;-</span> categorical_summary</span>
+<span id="cb15-156"><a href="#cb15-156" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb15-157"><a href="#cb15-157" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-158"><a href="#cb15-158" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(results)</span>
+<span id="cb15-159"><a href="#cb15-159" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now Let’s test our summary function</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Using default behavior (all variables)</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>results1 <span class="ot">&lt;-</span> <span class="fu">summary.census</span>(everything)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(results1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$numeric_summary
+$numeric_summary$`Gasoline cost (monthly)`
+$numeric_summary$`Gasoline cost (monthly)`$mean
+[1] 65.96931
+
+$numeric_summary$`Gasoline cost (monthly)`$sd
+[1] 145.7646
+
+
+$numeric_summary$Age
+$numeric_summary$Age$mean
+[1] 38.80219
+
+$numeric_summary$Age$sd
+[1] 22.42793
+
+
+$numeric_summary$`Gross rent as a percentage of household income`
+$numeric_summary$`Gross rent as a percentage of household income`$mean
+[1] 10.71139
+
+$numeric_summary$`Gross rent as a percentage of household income`$sd
+[1] 22.36287
+
+
+$numeric_summary$`Travel time to work`
+$numeric_summary$`Travel time to work`$mean
+[1] 10.6618
+
+$numeric_summary$`Travel time to work`$sd
+[1] 18.26052
+
+
+$numeric_summary$`Time of arrival at work`
+$numeric_summary$`Time of arrival at work`$mean
+[1] 42.47839
+
+$numeric_summary$`Time of arrival at work`$sd
+[1] 55.53998
+
+
+$numeric_summary$`Time of departure for work`
+$numeric_summary$`Time of departure for work`$mean
+[1] 22.43893
+
+$numeric_summary$`Time of departure for work`$sd
+[1] 31.50714
+
+
+
+$categorical_summary
+$categorical_summary$`Gave birth to child within the past 12 months`
+  N/A   Yes    No 
+46345   655 12841 
+
+$categorical_summary$`Household language`
+                   N/A (GQ/vacant)                       English Only 
+                              2790                              46143 
+                           Spanish      Other Indo-European languages 
+                              6558                               2226 
+Asian and Pacific Island languages                     Other Language 
+                              1591                                533 
+
+$categorical_summary$`High speed internet`
+N/A (GQ/vacant/no paid access to the internet) 
+                                          5405 
+                                           Yes 
+                                         47042 
+                                            No 
+                                          7394 
+
+$categorical_summary$`Means of transportation to work`
+             N/A             &lt;NA&gt;           Walked Worked from home 
+           29658            21488              816             6791 
+    Other method             &lt;NA&gt;             &lt;NA&gt;             &lt;NA&gt; 
+             272              279               13               15 
+            &lt;NA&gt;             &lt;NA&gt;             &lt;NA&gt;             &lt;NA&gt; 
+             104                6               17               50 
+            &lt;NA&gt; 
+             332 
+
+$categorical_summary$`School enrollment`
+                  N/A (less than 3 years old) 
+                                         1592 
+    No, has not attended in the last 3 months 
+                                        45041 
+         Yes, public school or public college 
+                                        11146 
+Yes, private school or college or home school 
+                                         2062 
+
+$categorical_summary$`Educational attainment`
+                                          &lt;NA&gt; 
+                                          1592 
+                                          &lt;NA&gt; 
+                                          1502 
+                                       Grade 7 
+                                           777 
+                                       Grade 8 
+                                           941 
+                                       Grade 9 
+                                           952 
+                                      Grade 10 
+                                          1111 
+                                      Grade 11 
+                                          1342 
+                       12th grade - no diploma 
+                                           790 
+                   Regular high school diploma 
+                                          8407 
+                 GED or alternative credential 
+                                          1842 
+            Some college, but less than 1 year 
+                                          3275 
+  1 or more years of college credit, no degree 
+                                          6427 
+                                          &lt;NA&gt; 
+                                           773 
+                            Associate's degree 
+                                          3761 
+                             Bachelor's degree 
+                                         13278 
+                               Master's degree 
+                                          5970 
+Professional degree beyond a bachelor's degree 
+                                          1284 
+                              Doctorate degree 
+                                          1031 
+                                          &lt;NA&gt; 
+                                           665 
+                                          &lt;NA&gt; 
+                                           576 
+                                          &lt;NA&gt; 
+                                           648 
+                                          &lt;NA&gt; 
+                                           682 
+                                          &lt;NA&gt; 
+                                           710 
+                                          &lt;NA&gt; 
+                                           717 
+                                          &lt;NA&gt; 
+                                           788 
+
+$categorical_summary$Sex
+ &lt;NA&gt;  &lt;NA&gt; 
+29940 29901 
+
+$categorical_summary$state
+
+   08 
+59841 </code></pre>
+</div>
+</div>
+<p>We can use specific variables and check if we can generate the summary for examples we can select few numeric variables and few categorical variables as follows</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Specifying specific variables</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">summary.census</span>(everything, </span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">numeric_vars =</span> <span class="fu">c</span>(<span class="st">"AGEP"</span>, <span class="st">"GRPIP"</span>),</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">categorical_vars =</span> <span class="fu">c</span>(<span class="st">"SEX"</span>, <span class="st">"FER"</span>))</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$numeric_summary
+$numeric_summary$Age
+$numeric_summary$Age$mean
+[1] 38.80219
+
+$numeric_summary$Age$sd
+[1] 22.42793
+
+
+$numeric_summary$`Gross rent as a percentage of household income`
+$numeric_summary$`Gross rent as a percentage of household income`$mean
+[1] 10.71139
+
+$numeric_summary$`Gross rent as a percentage of household income`$sd
+[1] 22.36287
+
+
+$numeric_summary$`Time of arrival at work`
+$numeric_summary$`Time of arrival at work`$mean
+[1] 42.47839
+
+$numeric_summary$`Time of arrival at work`$sd
+[1] 55.53998
+
+
+$numeric_summary$`Time of departure for work`
+$numeric_summary$`Time of departure for work`$mean
+[1] 22.43893
+
+$numeric_summary$`Time of departure for work`$sd
+[1] 31.50714
+
+
+
+$categorical_summary
+$categorical_summary$Sex
+ &lt;NA&gt;  &lt;NA&gt; 
+29940 29901 
+
+$categorical_summary$`Gave birth to child within the past 12 months`
+  N/A   Yes    No 
+46345   655 12841 </code></pre>
+</div>
+</div>
+<p>Let’s access our results</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Access results</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>results1<span class="sc">$</span>numeric_summary<span class="sc">$</span>Age<span class="sc">$</span>mean</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 38.80219</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>results1<span class="sc">$</span>categorical_summary<span class="sc">$</span>Sex</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> &lt;NA&gt;  &lt;NA&gt; 
+29940 29901 </code></pre>
+</div>
+</div>
 </section>
 <section id="plot-function" class="level3">
 <h3 class="anchored" data-anchor-id="plot-function">Plot Function</h3>
-<ul>
-<li>test this</li>
-</ul>
 
 
 </section>

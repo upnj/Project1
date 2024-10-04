@@ -1,5 +1,5 @@
 ---
-title: "Project1"
+title: "ST: 558, Project 1"
 author: "Upendra Joshi & John Tuong"
 warning: false
 format: html
@@ -7,12 +7,7 @@ editor: visual
 editor_options: 
   chunk_output_type: console
 ---
-
-# ST: 558, Project 1
-
-### By Upendra Joshi & John Tuong
-
-## Introduction
+# Introduction
 
 -   The Public Use Microdata Sample (PUMS) Census API (Application Programming Interface) is a collection of data files from the United States Census Bureau that provides access to data samples of the U.S. population and housing units. More specifically, these PUMS data sets cover the HUD's (U.S. Department of Housing and Urban Development) largest rental assistance programs (Public Housing, Section 8, etc). This data is compiled from responses to the American Community Surveys (ACS). The PUMS is comprised of two files: one for person records and the other for housing unit records. It includes geographic and household information including, but not limited to: family type, household income, race, gender, etc. The PUMS' data sets are valuable sources of information to policymakers and the researchers, as it can give some insight on how to better allocate resources and focus on helping those who need it the most.
 
@@ -502,7 +497,7 @@ Now Let's test our summary function
 # Using default behavior (all variables)
 results1 <- summary.census(everything)
 head(results1)
-str(results1)
+
 ```
 
 We can use specific variables and check if we can generate the summary 
@@ -512,8 +507,8 @@ for examples we can select few numeric variables and few categorical variables a
 
 # Specifying specific variables
 results <- summary.census(everything, 
-                  numeric_vars = c("age", "income"),
-                  categorical_vars = c("sex", "race"))
+                  numeric_vars = c("AGEP", "GRPIP"),
+                  categorical_vars = c("SEX", "FER"))
 
 head(results)
 ```
@@ -522,8 +517,8 @@ Let's access our results
 
 ```{r}
 # Access results
-results1$numeric_summary$age$mean
-results1$categorical_summary$sex
+results1$numeric_summary$Age$mean
+results1$categorical_summary$Sex
 ```
 
 
