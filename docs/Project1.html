@@ -586,15 +586,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb15-80"><a href="#cb15-80" aria-hidden="true" tabindex="-1"></a>    category_mappings <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
 <span id="cb15-81"><a href="#cb15-81" aria-hidden="true" tabindex="-1"></a>      <span class="at">FER =</span> <span class="fu">c</span>(<span class="st">"0"</span> <span class="ot">=</span> <span class="st">"N/A"</span>, <span class="st">"1"</span> <span class="ot">=</span> <span class="st">"Yes"</span>, <span class="st">"2"</span> <span class="ot">=</span> <span class="st">"No"</span>),</span>
 <span id="cb15-82"><a href="#cb15-82" aria-hidden="true" tabindex="-1"></a>      <span class="at">SEX =</span> <span class="fu">c</span>(<span class="st">"1"</span> <span class="ot">=</span> <span class="st">"Male"</span>, <span class="st">"2"</span> <span class="ot">=</span> <span class="st">"Female"</span>),</span>
-<span id="cb15-83"><a href="#cb15-83" aria-hidden="true" tabindex="-1"></a>      <span class="at">SCHL =</span> <span class="fu">c</span>(<span class="st">"01"</span> <span class="ot">=</span> <span class="st">"No schooling completed"</span>,</span>
-<span id="cb15-84"><a href="#cb15-84" aria-hidden="true" tabindex="-1"></a>               <span class="st">"02"</span> <span class="ot">=</span> <span class="st">"Nursery school, preschool"</span>,</span>
-<span id="cb15-85"><a href="#cb15-85" aria-hidden="true" tabindex="-1"></a>               <span class="st">"03"</span> <span class="ot">=</span> <span class="st">"Kindergarten"</span>,</span>
-<span id="cb15-86"><a href="#cb15-86" aria-hidden="true" tabindex="-1"></a>               <span class="st">"04"</span> <span class="ot">=</span> <span class="st">"Grade 1"</span>,</span>
-<span id="cb15-87"><a href="#cb15-87" aria-hidden="true" tabindex="-1"></a>               <span class="st">"05"</span> <span class="ot">=</span> <span class="st">"Grade 2"</span>,</span>
-<span id="cb15-88"><a href="#cb15-88" aria-hidden="true" tabindex="-1"></a>               <span class="st">"06"</span> <span class="ot">=</span> <span class="st">"Grade 3"</span>,</span>
-<span id="cb15-89"><a href="#cb15-89" aria-hidden="true" tabindex="-1"></a>               <span class="st">"07"</span> <span class="ot">=</span> <span class="st">"Grade 4"</span>,</span>
-<span id="cb15-90"><a href="#cb15-90" aria-hidden="true" tabindex="-1"></a>               <span class="st">"08"</span> <span class="ot">=</span> <span class="st">"Grade 5"</span>,</span>
-<span id="cb15-91"><a href="#cb15-91" aria-hidden="true" tabindex="-1"></a>               <span class="st">"09"</span> <span class="ot">=</span> <span class="st">"Grade 6"</span>,</span>
+<span id="cb15-83"><a href="#cb15-83" aria-hidden="true" tabindex="-1"></a>      <span class="at">SCHL =</span> <span class="fu">c</span>(<span class="st">"1"</span> <span class="ot">=</span> <span class="st">"No schooling completed"</span>,</span>
+<span id="cb15-84"><a href="#cb15-84" aria-hidden="true" tabindex="-1"></a>               <span class="st">"2"</span> <span class="ot">=</span> <span class="st">"Nursery school, preschool"</span>,</span>
+<span id="cb15-85"><a href="#cb15-85" aria-hidden="true" tabindex="-1"></a>               <span class="st">"3"</span> <span class="ot">=</span> <span class="st">"Kindergarten"</span>,</span>
+<span id="cb15-86"><a href="#cb15-86" aria-hidden="true" tabindex="-1"></a>               <span class="st">"4"</span> <span class="ot">=</span> <span class="st">"Grade 1"</span>,</span>
+<span id="cb15-87"><a href="#cb15-87" aria-hidden="true" tabindex="-1"></a>               <span class="st">"5"</span> <span class="ot">=</span> <span class="st">"Grade 2"</span>,</span>
+<span id="cb15-88"><a href="#cb15-88" aria-hidden="true" tabindex="-1"></a>               <span class="st">"6"</span> <span class="ot">=</span> <span class="st">"Grade 3"</span>,</span>
+<span id="cb15-89"><a href="#cb15-89" aria-hidden="true" tabindex="-1"></a>               <span class="st">"7"</span> <span class="ot">=</span> <span class="st">"Grade 4"</span>,</span>
+<span id="cb15-90"><a href="#cb15-90" aria-hidden="true" tabindex="-1"></a>               <span class="st">"8"</span> <span class="ot">=</span> <span class="st">"Grade 5"</span>,</span>
+<span id="cb15-91"><a href="#cb15-91" aria-hidden="true" tabindex="-1"></a>               <span class="st">"9"</span> <span class="ot">=</span> <span class="st">"Grade 6"</span>,</span>
 <span id="cb15-92"><a href="#cb15-92" aria-hidden="true" tabindex="-1"></a>               <span class="st">"10"</span> <span class="ot">=</span> <span class="st">"Grade 7"</span>,</span>
 <span id="cb15-93"><a href="#cb15-93" aria-hidden="true" tabindex="-1"></a>               <span class="st">"11"</span> <span class="ot">=</span> <span class="st">"Grade 8"</span>,</span>
 <span id="cb15-94"><a href="#cb15-94" aria-hidden="true" tabindex="-1"></a>               <span class="st">"12"</span> <span class="ot">=</span> <span class="st">"Grade 9"</span>,</span>
@@ -619,56 +619,68 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb15-113"><a href="#cb15-113" aria-hidden="true" tabindex="-1"></a>      <span class="at">HISPEED =</span> <span class="fu">c</span>(<span class="st">"0"</span> <span class="ot">=</span> <span class="st">"N/A (GQ/vacant/no paid access to the internet)"</span>,</span>
 <span id="cb15-114"><a href="#cb15-114" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"1"</span> <span class="ot">=</span>  <span class="st">"Yes"</span>,</span>
 <span id="cb15-115"><a href="#cb15-115" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"2"</span> <span class="ot">=</span> <span class="st">"No"</span>),</span>
-<span id="cb15-116"><a href="#cb15-116" aria-hidden="true" tabindex="-1"></a>      <span class="at">JWTRNS =</span> <span class="fu">c</span>(<span class="st">"0"</span> <span class="ot">=</span> <span class="st">"N/A"</span>,</span>
-<span id="cb15-117"><a href="#cb15-117" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"10"</span> <span class="ot">=</span> <span class="st">"Walked"</span>,</span>
-<span id="cb15-118"><a href="#cb15-118" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"11"</span> <span class="ot">=</span> <span class="st">"Worked from home"</span>,</span>
-<span id="cb15-119"><a href="#cb15-119" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"12"</span> <span class="ot">=</span> <span class="st">"Other method"</span>,</span>
-<span id="cb15-120"><a href="#cb15-120" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"07"</span> <span class="ot">=</span> <span class="st">"Taxicab"</span>,</span>
-<span id="cb15-121"><a href="#cb15-121" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"02"</span> <span class="ot">=</span> <span class="st">"Bus"</span>,</span>
-<span id="cb15-122"><a href="#cb15-122" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"05"</span> <span class="ot">=</span> <span class="st">"Light rail, streetcar, or trolley"</span>,</span>
-<span id="cb15-123"><a href="#cb15-123" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"04"</span> <span class="ot">=</span> <span class="st">"Long-distance train or commuter rail"</span>,</span>
-<span id="cb15-124"><a href="#cb15-124" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"09"</span> <span class="ot">=</span> <span class="st">"Bicycle"</span>,</span>
-<span id="cb15-125"><a href="#cb15-125" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"01"</span> <span class="ot">=</span> <span class="st">"Car, truck, or van"</span>,</span>
-<span id="cb15-126"><a href="#cb15-126" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"03"</span> <span class="ot">=</span> <span class="st">"Subway or elevated rail"</span>,</span>
-<span id="cb15-127"><a href="#cb15-127" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"06"</span> <span class="ot">=</span> <span class="st">"Ferryboat"</span>,</span>
-<span id="cb15-128"><a href="#cb15-128" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"08"</span> <span class="ot">=</span> <span class="st">"Motorcycle"</span>),</span>
-<span id="cb15-129"><a href="#cb15-129" aria-hidden="true" tabindex="-1"></a>      <span class="at">SCH =</span> <span class="fu">c</span>(<span class="st">"0"</span> <span class="ot">=</span> <span class="st">"N/A (less than 3 years old)"</span>,</span>
-<span id="cb15-130"><a href="#cb15-130" aria-hidden="true" tabindex="-1"></a>              <span class="st">"1"</span> <span class="ot">=</span> <span class="st">"No, has not attended in the last 3 months"</span>,</span>
-<span id="cb15-131"><a href="#cb15-131" aria-hidden="true" tabindex="-1"></a>              <span class="st">"2"</span> <span class="ot">=</span> <span class="st">"Yes, public school or public college"</span>,</span>
-<span id="cb15-132"><a href="#cb15-132" aria-hidden="true" tabindex="-1"></a>              <span class="st">"3"</span> <span class="ot">=</span> <span class="st">"Yes, private school or college or home school"</span>)</span>
-<span id="cb15-133"><a href="#cb15-133" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb15-134"><a href="#cb15-134" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb15-135"><a href="#cb15-135" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (var <span class="cf">in</span> categorical_vars) {</span>
-<span id="cb15-136"><a href="#cb15-136" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Get counts</span></span>
-<span id="cb15-137"><a href="#cb15-137" aria-hidden="true" tabindex="-1"></a>      counts <span class="ot">&lt;-</span> <span class="fu">table</span>(object[[var]])</span>
-<span id="cb15-138"><a href="#cb15-138" aria-hidden="true" tabindex="-1"></a>      </span>
-<span id="cb15-139"><a href="#cb15-139" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Apply mapping if available</span></span>
-<span id="cb15-140"><a href="#cb15-140" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (var <span class="sc">%in%</span> <span class="fu">names</span>(category_mappings)) {</span>
-<span id="cb15-141"><a href="#cb15-141" aria-hidden="true" tabindex="-1"></a>        mapped_counts <span class="ot">&lt;-</span> counts</span>
-<span id="cb15-142"><a href="#cb15-142" aria-hidden="true" tabindex="-1"></a>        <span class="fu">names</span>(mapped_counts) <span class="ot">&lt;-</span> category_mappings[[var]][<span class="fu">names</span>(counts)]</span>
-<span id="cb15-143"><a href="#cb15-143" aria-hidden="true" tabindex="-1"></a>        counts_to_use <span class="ot">&lt;-</span> mapped_counts</span>
-<span id="cb15-144"><a href="#cb15-144" aria-hidden="true" tabindex="-1"></a>      } <span class="cf">else</span> {</span>
-<span id="cb15-145"><a href="#cb15-145" aria-hidden="true" tabindex="-1"></a>        counts_to_use <span class="ot">&lt;-</span> counts</span>
-<span id="cb15-146"><a href="#cb15-146" aria-hidden="true" tabindex="-1"></a>      }</span>
-<span id="cb15-147"><a href="#cb15-147" aria-hidden="true" tabindex="-1"></a>      </span>
-<span id="cb15-148"><a href="#cb15-148" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Get label for the variable</span></span>
-<span id="cb15-149"><a href="#cb15-149" aria-hidden="true" tabindex="-1"></a>      label <span class="ot">&lt;-</span> <span class="cf">if</span> (var <span class="sc">%in%</span> <span class="fu">names</span>(variable_labels)) variable_labels[[var]] <span class="cf">else</span> var</span>
-<span id="cb15-150"><a href="#cb15-150" aria-hidden="true" tabindex="-1"></a>      </span>
-<span id="cb15-151"><a href="#cb15-151" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Store results with label</span></span>
-<span id="cb15-152"><a href="#cb15-152" aria-hidden="true" tabindex="-1"></a>      categorical_summary[[label]] <span class="ot">&lt;-</span> counts_to_use</span>
-<span id="cb15-153"><a href="#cb15-153" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb15-154"><a href="#cb15-154" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb15-155"><a href="#cb15-155" aria-hidden="true" tabindex="-1"></a>    results[[<span class="st">"categorical_summary"</span>]] <span class="ot">&lt;-</span> categorical_summary</span>
-<span id="cb15-156"><a href="#cb15-156" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb15-157"><a href="#cb15-157" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb15-158"><a href="#cb15-158" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(results)</span>
-<span id="cb15-159"><a href="#cb15-159" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-116"><a href="#cb15-116" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb15-117"><a href="#cb15-117" aria-hidden="true" tabindex="-1"></a>      <span class="at">SCH =</span> <span class="fu">c</span>(<span class="st">"0"</span> <span class="ot">=</span> <span class="st">"N/A (less than 3 years old)"</span>,</span>
+<span id="cb15-118"><a href="#cb15-118" aria-hidden="true" tabindex="-1"></a>              <span class="st">"1"</span> <span class="ot">=</span> <span class="st">"No, has not attended in the last 3 months"</span>,</span>
+<span id="cb15-119"><a href="#cb15-119" aria-hidden="true" tabindex="-1"></a>              <span class="st">"2"</span> <span class="ot">=</span> <span class="st">"Yes, public school or public college"</span>,</span>
+<span id="cb15-120"><a href="#cb15-120" aria-hidden="true" tabindex="-1"></a>              <span class="st">"3"</span> <span class="ot">=</span> <span class="st">"Yes, private school or college or home school"</span>))</span>
+<span id="cb15-121"><a href="#cb15-121" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb15-122"><a href="#cb15-122" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb15-123"><a href="#cb15-123" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (var <span class="cf">in</span> categorical_vars) {</span>
+<span id="cb15-124"><a href="#cb15-124" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Get counts</span></span>
+<span id="cb15-125"><a href="#cb15-125" aria-hidden="true" tabindex="-1"></a>      counts <span class="ot">&lt;-</span> <span class="fu">table</span>(object[[var]])</span>
+<span id="cb15-126"><a href="#cb15-126" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb15-127"><a href="#cb15-127" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Apply mapping if available</span></span>
+<span id="cb15-128"><a href="#cb15-128" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb15-129"><a href="#cb15-129" aria-hidden="true" tabindex="-1"></a>       <span class="co"># Special handling for SEX variable</span></span>
+<span id="cb15-130"><a href="#cb15-130" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (var <span class="sc">==</span> <span class="st">"SEX"</span>) {</span>
+<span id="cb15-131"><a href="#cb15-131" aria-hidden="true" tabindex="-1"></a>        counts_to_use <span class="ot">&lt;-</span> counts</span>
+<span id="cb15-132"><a href="#cb15-132" aria-hidden="true" tabindex="-1"></a>        <span class="fu">names</span>(counts_to_use) <span class="ot">&lt;-</span> <span class="fu">levels</span>(object[[var]])  <span class="co"># Preserve original labels</span></span>
+<span id="cb15-133"><a href="#cb15-133" aria-hidden="true" tabindex="-1"></a>      }<span class="cf">else</span>   <span class="cf">if</span> (var <span class="sc">==</span> <span class="st">"JWTRNS"</span>) {</span>
+<span id="cb15-134"><a href="#cb15-134" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Special handling for JWTRNS</span></span>
+<span id="cb15-135"><a href="#cb15-135" aria-hidden="true" tabindex="-1"></a>      jwtrns_mapping <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb15-136"><a href="#cb15-136" aria-hidden="true" tabindex="-1"></a>        <span class="st">"0"</span> <span class="ot">=</span> <span class="st">"N/A"</span>,</span>
+<span id="cb15-137"><a href="#cb15-137" aria-hidden="true" tabindex="-1"></a>        <span class="st">"1"</span> <span class="ot">=</span> <span class="st">"Car, truck, or van"</span>,</span>
+<span id="cb15-138"><a href="#cb15-138" aria-hidden="true" tabindex="-1"></a>        <span class="st">"2"</span> <span class="ot">=</span> <span class="st">"Bus"</span>,</span>
+<span id="cb15-139"><a href="#cb15-139" aria-hidden="true" tabindex="-1"></a>        <span class="st">"3"</span> <span class="ot">=</span> <span class="st">"Subway or elevated rail"</span>,</span>
+<span id="cb15-140"><a href="#cb15-140" aria-hidden="true" tabindex="-1"></a>        <span class="st">"4"</span> <span class="ot">=</span> <span class="st">"Long-distance train or commuter rail"</span>,</span>
+<span id="cb15-141"><a href="#cb15-141" aria-hidden="true" tabindex="-1"></a>        <span class="st">"5"</span> <span class="ot">=</span> <span class="st">"Light rail, streetcar, or trolley"</span>,</span>
+<span id="cb15-142"><a href="#cb15-142" aria-hidden="true" tabindex="-1"></a>        <span class="st">"6"</span> <span class="ot">=</span> <span class="st">"Ferryboat"</span>,</span>
+<span id="cb15-143"><a href="#cb15-143" aria-hidden="true" tabindex="-1"></a>        <span class="st">"7"</span> <span class="ot">=</span> <span class="st">"Taxicab"</span>,</span>
+<span id="cb15-144"><a href="#cb15-144" aria-hidden="true" tabindex="-1"></a>        <span class="st">"8"</span> <span class="ot">=</span> <span class="st">"Motorcycle"</span>,</span>
+<span id="cb15-145"><a href="#cb15-145" aria-hidden="true" tabindex="-1"></a>        <span class="st">"9"</span> <span class="ot">=</span> <span class="st">"Bicycle"</span>,</span>
+<span id="cb15-146"><a href="#cb15-146" aria-hidden="true" tabindex="-1"></a>        <span class="st">"10"</span> <span class="ot">=</span> <span class="st">"Walked"</span>,</span>
+<span id="cb15-147"><a href="#cb15-147" aria-hidden="true" tabindex="-1"></a>        <span class="st">"11"</span> <span class="ot">=</span> <span class="st">"Worked from home"</span>,</span>
+<span id="cb15-148"><a href="#cb15-148" aria-hidden="true" tabindex="-1"></a>        <span class="st">"12"</span> <span class="ot">=</span> <span class="st">"Other method"</span></span>
+<span id="cb15-149"><a href="#cb15-149" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb15-150"><a href="#cb15-150" aria-hidden="true" tabindex="-1"></a>      counts_to_use <span class="ot">&lt;-</span> counts</span>
+<span id="cb15-151"><a href="#cb15-151" aria-hidden="true" tabindex="-1"></a>      <span class="fu">names</span>(counts_to_use) <span class="ot">&lt;-</span> jwtrns_mapping[<span class="fu">names</span>(counts)]</span>
+<span id="cb15-152"><a href="#cb15-152" aria-hidden="true" tabindex="-1"></a>      } <span class="cf">else</span> <span class="cf">if</span> (var <span class="sc">%in%</span> <span class="fu">names</span>(category_mappings)) {</span>
+<span id="cb15-153"><a href="#cb15-153" aria-hidden="true" tabindex="-1"></a>        mapped_counts <span class="ot">&lt;-</span> counts</span>
+<span id="cb15-154"><a href="#cb15-154" aria-hidden="true" tabindex="-1"></a>        <span class="fu">names</span>(mapped_counts) <span class="ot">&lt;-</span> category_mappings[[var]][<span class="fu">names</span>(counts)]</span>
+<span id="cb15-155"><a href="#cb15-155" aria-hidden="true" tabindex="-1"></a>        counts_to_use <span class="ot">&lt;-</span> mapped_counts</span>
+<span id="cb15-156"><a href="#cb15-156" aria-hidden="true" tabindex="-1"></a>      } <span class="cf">else</span> {</span>
+<span id="cb15-157"><a href="#cb15-157" aria-hidden="true" tabindex="-1"></a>        counts_to_use <span class="ot">&lt;-</span> counts</span>
+<span id="cb15-158"><a href="#cb15-158" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb15-159"><a href="#cb15-159" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb15-160"><a href="#cb15-160" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Get label for the variable</span></span>
+<span id="cb15-161"><a href="#cb15-161" aria-hidden="true" tabindex="-1"></a>      label <span class="ot">&lt;-</span> <span class="cf">if</span> (var <span class="sc">%in%</span> <span class="fu">names</span>(variable_labels)) variable_labels[[var]] <span class="cf">else</span> var</span>
+<span id="cb15-162"><a href="#cb15-162" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb15-163"><a href="#cb15-163" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Store results with label</span></span>
+<span id="cb15-164"><a href="#cb15-164" aria-hidden="true" tabindex="-1"></a>      categorical_summary[[label]] <span class="ot">&lt;-</span> counts_to_use</span>
+<span id="cb15-165"><a href="#cb15-165" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb15-166"><a href="#cb15-166" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb15-167"><a href="#cb15-167" aria-hidden="true" tabindex="-1"></a>    results[[<span class="st">"categorical_summary"</span>]] <span class="ot">&lt;-</span> categorical_summary</span>
+<span id="cb15-168"><a href="#cb15-168" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb15-169"><a href="#cb15-169" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-170"><a href="#cb15-170" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(results)</span>
+<span id="cb15-171"><a href="#cb15-171" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Now Let’s test our summary function</p>
+<p>Now Let’s test our summary function. This will give us the weighted means and standard deviations for numeric variables and counts for categorical variables</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Using default behavior (all variables)</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>results1 <span class="ot">&lt;-</span> <span class="fu">summary.census</span>(everything)</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(results1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(results1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$numeric_summary
 $numeric_summary$`Gasoline cost (monthly)`
@@ -742,14 +754,20 @@ N/A (GQ/vacant/no paid access to the internet)
                                           7394 
 
 $categorical_summary$`Means of transportation to work`
-             N/A             &lt;NA&gt;           Walked Worked from home 
-           29658            21488              816             6791 
-    Other method             &lt;NA&gt;             &lt;NA&gt;             &lt;NA&gt; 
-             272              279               13               15 
-            &lt;NA&gt;             &lt;NA&gt;             &lt;NA&gt;             &lt;NA&gt; 
-             104                6               17               50 
-            &lt;NA&gt; 
-             332 
+                                 N/A                   Car, truck, or van 
+                               29658                                21488 
+                              Walked                     Worked from home 
+                                 816                                 6791 
+                        Other method                                  Bus 
+                                 272                                  279 
+             Subway or elevated rail Long-distance train or commuter rail 
+                                  13                                   15 
+   Light rail, streetcar, or trolley                            Ferryboat 
+                                 104                                    6 
+                             Taxicab                           Motorcycle 
+                                  17                                   50 
+                             Bicycle 
+                                 332 
 
 $categorical_summary$`School enrollment`
                   N/A (less than 3 years old) 
@@ -764,7 +782,7 @@ Yes, private school or college or home school
 $categorical_summary$`Educational attainment`
                                           &lt;NA&gt; 
                                           1592 
-                                          &lt;NA&gt; 
+                        No schooling completed 
                                           1502 
                                        Grade 7 
                                            777 
@@ -786,7 +804,7 @@ $categorical_summary$`Educational attainment`
                                           3275 
   1 or more years of college credit, no degree 
                                           6427 
-                                          &lt;NA&gt; 
+                     Nursery school, preschool 
                                            773 
                             Associate's degree 
                                           3761 
@@ -798,24 +816,24 @@ Professional degree beyond a bachelor's degree
                                           1284 
                               Doctorate degree 
                                           1031 
-                                          &lt;NA&gt; 
+                                  Kindergarten 
                                            665 
-                                          &lt;NA&gt; 
+                                       Grade 1 
                                            576 
-                                          &lt;NA&gt; 
+                                       Grade 2 
                                            648 
-                                          &lt;NA&gt; 
+                                       Grade 3 
                                            682 
-                                          &lt;NA&gt; 
+                                       Grade 4 
                                            710 
-                                          &lt;NA&gt; 
+                                       Grade 5 
                                            717 
-                                          &lt;NA&gt; 
+                                       Grade 6 
                                            788 
 
 $categorical_summary$Sex
- &lt;NA&gt;  &lt;NA&gt; 
-29940 29901 
+  Male Female 
+ 29940  29901 
 
 $categorical_summary$state
 
@@ -830,7 +848,7 @@ $categorical_summary$state
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">numeric_vars =</span> <span class="fu">c</span>(<span class="st">"AGEP"</span>, <span class="st">"GRPIP"</span>),</span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">categorical_vars =</span> <span class="fu">c</span>(<span class="st">"SEX"</span>, <span class="st">"FER"</span>))</span>
 <span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$numeric_summary
 $numeric_summary$Age
@@ -868,85 +886,356 @@ $numeric_summary$`Time of departure for work`$sd
 
 $categorical_summary
 $categorical_summary$Sex
- &lt;NA&gt;  &lt;NA&gt; 
-29940 29901 
+  Male Female 
+ 29940  29901 
 
 $categorical_summary$`Gave birth to child within the past 12 months`
   N/A   Yes    No 
 46345   655 12841 </code></pre>
 </div>
 </div>
-<p>Let’s access our results</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Access results</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>results1<span class="sc">$</span>numeric_summary<span class="sc">$</span>Age<span class="sc">$</span>mean</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 38.80219</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>results1<span class="sc">$</span>categorical_summary<span class="sc">$</span>Sex</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code> &lt;NA&gt;  &lt;NA&gt; 
-29940 29901 </code></pre>
-</div>
-</div>
 </section>
 <section id="plot-function" class="level3">
 <h3 class="anchored" data-anchor-id="plot-function">Plot Function</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>plot.census <span class="ot">&lt;-</span> <span class="cf">function</span>(x, cat_var, num_var, ...) {</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Check if the object is of class "census"</span></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">inherits</span>(x, <span class="st">"census"</span>)) {</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">"This function only works for objects of class 'census'"</span>)</span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Check if cat_var and num_var are provided</span></span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">missing</span>(cat_var) <span class="sc">||</span> <span class="fu">missing</span>(num_var)) {</span>
-<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">"Both cat_var and num_var must be specified"</span>)</span>
-<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Check if cat_var and num_var exist in the data</span></span>
-<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span>cat_var <span class="sc">%in%</span> <span class="fu">names</span>(x)) {</span>
-<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="fu">paste</span>(<span class="st">"Categorical variable"</span>, cat_var, <span class="st">"not found in the data"</span>))</span>
-<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span>num_var <span class="sc">%in%</span> <span class="fu">names</span>(x)) {</span>
-<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="fu">paste</span>(<span class="st">"Numeric variable"</span>, num_var, <span class="st">"not found in the data"</span>))</span>
-<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Check if cat_var is categorical (factor or character)</span></span>
-<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.factor</span>(x[[cat_var]]) <span class="sc">&amp;&amp;</span> <span class="sc">!</span><span class="fu">is.character</span>(x[[cat_var]])) {</span>
-<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="fu">paste</span>(cat_var, <span class="st">"must be a categorical variable (factor or character)"</span>))</span>
-<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Check if num_var is numeric</span></span>
-<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.numeric</span>(x[[num_var]])) {</span>
-<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="fu">paste</span>(num_var, <span class="st">"must be a numeric variable"</span>))</span>
-<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create the plot</span></span>
-<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(x, <span class="fu">aes</span>(<span class="at">x =</span> .data[[cat_var]], <span class="at">y =</span> .data[[num_var]], <span class="at">weight =</span> PWGTP)) <span class="sc">+</span></span>
-<span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
-<span id="cb24-35"><a href="#cb24-35" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> cat_var, <span class="at">y =</span> num_var, <span class="at">title =</span> <span class="fu">paste</span>(<span class="st">"Weighted Boxplot of"</span>, num_var, <span class="st">"by"</span>, cat_var)) <span class="sc">+</span></span>
-<span id="cb24-36"><a href="#cb24-36" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb24-37"><a href="#cb24-37" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
-<span id="cb24-38"><a href="#cb24-38" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb24-39"><a href="#cb24-39" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Print the plot</span></span>
-<span id="cb24-40"><a href="#cb24-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(p)</span>
-<span id="cb24-41"><a href="#cb24-41" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb24-42"><a href="#cb24-42" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Return the plot object invisibly</span></span>
-<span id="cb24-43"><a href="#cb24-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">invisible</span>(p)</span>
-<span id="cb24-44"><a href="#cb24-44" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>plot.census <span class="ot">&lt;-</span> <span class="cf">function</span>(x, cat_var, num_var, ...) {</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Check if the object is of class "census"</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">inherits</span>(x, <span class="st">"census"</span>)) {</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">"This function only works for objects of class 'census'"</span>)</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Check if cat_var and num_var are provided</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">missing</span>(cat_var) <span class="sc">||</span> <span class="fu">missing</span>(num_var)) {</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">"Both cat_var and num_var must be specified"</span>)</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Check if cat_var and num_var exist in the data</span></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span>cat_var <span class="sc">%in%</span> <span class="fu">names</span>(x)) {</span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="fu">paste</span>(<span class="st">"Categorical variable"</span>, cat_var, <span class="st">"not found in the data"</span>))</span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span>num_var <span class="sc">%in%</span> <span class="fu">names</span>(x)) {</span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="fu">paste</span>(<span class="st">"Numeric variable"</span>, num_var, <span class="st">"not found in the data"</span>))</span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Check if cat_var is categorical (factor or character)</span></span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.factor</span>(x[[cat_var]]) <span class="sc">&amp;&amp;</span> <span class="sc">!</span><span class="fu">is.character</span>(x[[cat_var]])) {</span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="fu">paste</span>(cat_var, <span class="st">"must be a categorical variable (factor or character)"</span>))</span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Check if num_var is numeric</span></span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.numeric</span>(x[[num_var]])) {</span>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="fu">paste</span>(num_var, <span class="st">"must be a numeric variable"</span>))</span>
+<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb20-31"><a href="#cb20-31" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-32"><a href="#cb20-32" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create the plot</span></span>
+<span id="cb20-33"><a href="#cb20-33" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(x, <span class="fu">aes</span>(<span class="at">x =</span> .data[[cat_var]], <span class="at">y =</span> .data[[num_var]], <span class="at">weight =</span> PWGTP)) <span class="sc">+</span></span>
+<span id="cb20-34"><a href="#cb20-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb20-35"><a href="#cb20-35" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> cat_var, <span class="at">y =</span> num_var, <span class="at">title =</span> <span class="fu">paste</span>(<span class="st">"Weighted Boxplot of"</span>, num_var, <span class="st">"by"</span>, cat_var)) <span class="sc">+</span></span>
+<span id="cb20-36"><a href="#cb20-36" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb20-37"><a href="#cb20-37" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
+<span id="cb20-38"><a href="#cb20-38" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-39"><a href="#cb20-39" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Print the plot</span></span>
+<span id="cb20-40"><a href="#cb20-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(p)</span>
+<span id="cb20-41"><a href="#cb20-41" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-42"><a href="#cb20-42" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Return the plot object invisibly</span></span>
+<span id="cb20-43"><a href="#cb20-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">invisible</span>(p)</span>
+<span id="cb20-44"><a href="#cb20-44" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Let’s test the plot function</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(everything, <span class="at">cat_var =</span> <span class="st">"SEX"</span>, <span class="at">num_var =</span> <span class="st">"AGEP"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Age distribution by sex</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(everything, <span class="at">cat_var =</span> <span class="st">"SEX"</span>, <span class="at">num_var =</span> <span class="st">"AGEP"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Project1_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Travel time to work by sex</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(everything, <span class="at">cat_var =</span> <span class="st">"SEX"</span>, <span class="at">num_var =</span> <span class="st">"JWMNP"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Project1_files/figure-html/unnamed-chunk-15-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Gross rent as percentage of income by household language</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(everything, <span class="at">cat_var =</span> <span class="st">"HHL"</span>, <span class="at">num_var =</span> <span class="st">"GRPIP"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Project1_files/figure-html/unnamed-chunk-15-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="understanding-the-data-and-interpresting-it-using-statistics" class="level2">
+<h2 class="anchored" data-anchor-id="understanding-the-data-and-interpresting-it-using-statistics">Understanding the data and interpresting it using statistics</h2>
+<p>Now we are all set! We can extract the data using main_query function and summaries it by summary.census function also we can create box plots using the plot function. Let’s understand the relationship between different variables and interpret the data using our summary and plot functions.</p>
+<p>For example we would like to get the answers of following questions #### What is the overall age and gender distribution of the population?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get summary statistics</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>summary_stats <span class="ot">&lt;-</span> <span class="fu">summary.census</span>(everything)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(summary_stats<span class="sc">$</span>numeric_summary<span class="sc">$</span>Age)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$mean
+[1] 38.80219
+
+$sd
+[1] 22.42793</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(summary_stats<span class="sc">$</span>categorical_summary<span class="sc">$</span>Sex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Male Female 
+ 29940  29901 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create an age distribution plot by gender</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(everything, <span class="at">cat_var =</span> <span class="st">"SEX"</span>, <span class="at">num_var =</span> <span class="st">"AGEP"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
 <p><img src="Project1_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
+</div>
+</div>
+<p>The summary statistics for age show:</p>
+<p>Mean age: 38.80 years Standard deviation: 22.43 years</p>
+<p>This indicates that:</p>
+<p>The average age of the population is about 39 years old. There’s a considerable spread in ages, with a standard deviation of about 22 years. This suggests a diverse population with a mix of younger and older individuals.</p>
+<p>Gender Distribution Male = 29,940 (50.03%) Female = 29,901 (49.97%)</p>
+<p>Which shows not much a difference in gender distribution</p>
+<section id="how-does-the-educational-attainment-vary-across-age-groups-and-genders" class="level4">
+<h4 class="anchored" data-anchor-id="how-does-the-educational-attainment-vary-across-age-groups-and-genders">How does the educational attainment vary across age groups and genders?</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a plot of educational attainment by age, colored by gender</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(everything, <span class="fu">aes</span>(<span class="at">x =</span> SCHL, <span class="at">y =</span> AGEP, <span class="at">fill =</span> SEX)) <span class="sc">+</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Educational Attainment"</span>, <span class="at">y =</span> <span class="st">"Age"</span>, <span class="at">fill =</span> <span class="st">"Sex"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Project1_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a contingency table of education by gender</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(everything<span class="sc">$</span>SCHL, everything<span class="sc">$</span>SEX)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    
+     Male Female
+  0   830    762
+  1   730    772
+  10  414    363
+  11  483    458
+  12  504    448
+  13  587    524
+  14  763    579
+  15  444    346
+  16 4335   4072
+  17 1118    724
+  18 1585   1690
+  19 3288   3139
+  2   392    381
+  20 1729   2032
+  21 6345   6933
+  22 2679   3291
+  23  696    588
+  24  558    473
+  3   353    312
+  4   311    265
+  5   304    344
+  6   354    328
+  7   347    363
+  8   411    306
+  9   380    408</code></pre>
+</div>
+</div>
+<p>This analysis gives us a detailed picture of educational attainment patterns across age groups and genders in your population. It highlights the progress made in educational equality, particularly in higher education, while also pointing out areas where disparities still exist.</p>
+<p>From the contingency table we can compare the two groups (Male vs Female) The most common education level for both genders is “21” (Bachelor’s degree), followed by “16” (Regular high school diploma). Women tend to outnumber men in Associate’s degrees (20) and Bachelor’s degrees (21). Men slightly outnumber women in Professional degrees beyond a bachelor’s degree (23).</p>
+<p>From the box plot we observe following things</p>
+<p>There’s a wide range of ages for most education levels, indicating lifelong learning or varied educational paths. The median age generally increases with higher levels of educational attainment. Lower education levels (0-9) show a wide age range, possibly indicating both young individuals still in school and older individuals with limited formal education. Higher education levels (16-24) show higher median ages, as expected. There’s a noticeable jump in median age for doctorate degrees (24), with females having a slightly higher median age than males.</p>
+</section>
+<section id="what-are-the-most-common-means-of-transportation-to-work-and-how-do-they-relate-to-commute-times" class="level4">
+<h4 class="anchored" data-anchor-id="what-are-the-most-common-means-of-transportation-to-work-and-how-do-they-relate-to-commute-times">What are the most common means of transportation to work, and how do they relate to commute times?</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get summary of transportation methods</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>summary_stats <span class="ot">&lt;-</span> <span class="fu">summary.census</span>(everything)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(summary_stats<span class="sc">$</span>categorical_summary<span class="sc">$</span><span class="st">`</span><span class="at">Means of transportation to work</span><span class="st">`</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                 N/A                   Car, truck, or van 
+                               29658                                21488 
+                              Walked                     Worked from home 
+                                 816                                 6791 
+                        Other method                                  Bus 
+                                 272                                  279 
+             Subway or elevated rail Long-distance train or commuter rail 
+                                  13                                   15 
+   Light rail, streetcar, or trolley                            Ferryboat 
+                                 104                                    6 
+                             Taxicab                           Motorcycle 
+                                  17                                   50 
+                             Bicycle 
+                                 332 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a plot of commute times by transportation method</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(everything, <span class="at">cat_var =</span> <span class="st">"JWTRNS"</span>, <span class="at">num_var =</span> <span class="st">"JWMNP"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Project1_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This analysis gives us a clear picture of the transportation landscape in your population. The dominance of personal vehicles, the significant proportion of remote workers, and the relatively low usage of public transit are key findings that have important implications for urban planning, environmental policies, and quality of life in the area.</p>
+<p>Non-commuters or Unspecified: The largest category is “N/A” (49.6%), which likely includes non-workers, remote workers, or those with unspecified commute methods.</p>
+<p>Vehicle Dominance: Among those who commute, personal vehicles (car, truck, or van) are overwhelmingly the most common method, used by 36.0% of the total population and 70.9% of specified commuters. Remote Work Trend: A significant portion (11.4%) work from home, reflecting modern work trends and potentially impacting traditional commute patterns.</p>
+<p>Active Transportation: Walking (1.4%) and cycling (0.6%) combined account for 2% of commuters, representing a small but notable group using active transportation.</p>
+<p>Public Transit: All forms of public transit (bus, light rail, subway, train) combined account for only about 0.7% of commuters, suggesting limited public transit infrastructure or usage.</p>
+<p>Alternative Methods: Motorcycles, taxicabs, and ferryboats are used by a very small fraction of commuters, likely reflecting niche transportation needs or preferences.</p>
+</section>
+<section id="is-there-a-relationship-between-household-language-and-economic-indicators-like-rent-burden" class="level4">
+<h4 class="anchored" data-anchor-id="is-there-a-relationship-between-household-language-and-economic-indicators-like-rent-burden">Is there a relationship between household language and economic indicators like rent burden?</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a plot of rent burden by household language</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(everything, <span class="at">cat_var =</span> <span class="st">"HHL"</span>, <span class="at">num_var =</span> <span class="st">"GRPIP"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Project1_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This analysis provides insights into the relationship between household language and rent burden, addressing the question about the connection between household language and economic indicators. The data suggests that there are indeed significant differences in economic stress related to housing costs across different language groups.</p>
+<ol type="1">
+<li><p>Language Disparities: There’s a clear disparity in rent burden across language groups, with English-only households generally facing lower rent burdens.</p></li>
+<li><p>Vulnerable Groups: Spanish-speaking households and those speaking “Other Languages” appear to face the highest rent burdens, suggesting greater economic vulnerability.</p></li>
+</ol>
+<p>Variability Within Groups: All language groups show significant variability in rent burden, indicating that factors beyond language (such as income, location, or occupation) play important roles. 3. Outlines: All groups have outliers with extremely high rent burdens (over 75% of income), but these are more prevalent in non-English speaking households.</p>
+<ol start="4" type="1">
+<li>Economic Integration: The overlap in distributions suggests that while there are trends, language alone doesn’t determine economic status or rent burden.</li>
+</ol>
+</section>
+<section id="is-there-any-relationship-between-the-mean-of-transportation-and-rent-burden" class="level4">
+<h4 class="anchored" data-anchor-id="is-there-any-relationship-between-the-mean-of-transportation-and-rent-burden">Is there any relationship between the Mean of Transportation and Rent Burden</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reclassify transportation categories</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>everything<span class="sc">$</span>transport_category <span class="ot">&lt;-</span> <span class="fu">case_when</span>(</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  everything<span class="sc">$</span>JWTRNS <span class="sc">==</span> <span class="st">"1"</span> <span class="sc">~</span> <span class="st">"Car"</span>,</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  everything<span class="sc">$</span>JWTRNS <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"2"</span>, <span class="st">"3"</span>, <span class="st">"4"</span>, <span class="st">"5"</span>, <span class="st">"7"</span>) <span class="sc">~</span> <span class="st">"Public Transport"</span>,</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"Other"</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter for car and public transport users with non-zero GRPIP</span></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>transport_rent_data <span class="ot">&lt;-</span> everything[everything<span class="sc">$</span>transport_category <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Car"</span>, <span class="st">"Public Transport"</span>) <span class="sc">&amp;</span> everything<span class="sc">$</span>GRPIP <span class="sc">&gt;</span> <span class="dv">0</span>, ]</span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Ensure transport_category is a factor</span></span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>transport_rent_data<span class="sc">$</span>transport_category <span class="ot">&lt;-</span> <span class="fu">factor</span>(transport_rent_data<span class="sc">$</span>transport_category)</span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary statistics</span></span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>car_summary <span class="ot">&lt;-</span> <span class="fu">summary</span>(transport_rent_data<span class="sc">$</span>GRPIP[transport_rent_data<span class="sc">$</span>transport_category <span class="sc">==</span> <span class="st">"Car"</span>])</span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>pt_summary <span class="ot">&lt;-</span> <span class="fu">summary</span>(transport_rent_data<span class="sc">$</span>GRPIP[transport_rent_data<span class="sc">$</span>transport_category <span class="sc">==</span> <span class="st">"Public Transport"</span>])</span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"Summary for Car Users:"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Summary for Car Users:"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(car_summary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+    1.0    18.0    26.0    32.9    39.0   101.0 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"Summary for Public Transport Users:"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Summary for Public Transport Users:"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(pt_summary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+   1.00   21.00   31.00   39.08   50.00  101.00 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualization: Boxplot</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(transport_rent_data, <span class="fu">aes</span>(<span class="at">x =</span> transport_category, <span class="at">y =</span> GRPIP, <span class="at">fill =</span> transport_category)) <span class="sc">+</span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Rent Burden by Transportation Method"</span>,</span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Transportation Method"</span>,</span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Gross Rent as Percentage of Household Income"</span>) <span class="sc">+</span></span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Project1_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># T-test to compare means</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>t_test_result <span class="ot">&lt;-</span> <span class="fu">t.test</span>(GRPIP <span class="sc">~</span> transport_category, <span class="at">data =</span> transport_rent_data)</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"T-test result:"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "T-test result:"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(t_test_result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  GRPIP by transport_category
+t = -3.4031, df = 225.54, p-value = 0.0007882
+alternative hypothesis: true difference in means between group Car and group Public Transport is not equal to 0
+95 percent confidence interval:
+ -9.757693 -2.601332
+sample estimates:
+             mean in group Car mean in group Public Transport 
+                      32.89993                       39.07944 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualization: Density plot</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(transport_rent_data, <span class="fu">aes</span>(<span class="at">x =</span> GRPIP, <span class="at">fill =</span> transport_category)) <span class="sc">+</span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distribution of Rent Burden by Transportation Method"</span>,</span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Gross Rent as Percentage of Household Income"</span>,</span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Density"</span>) <span class="sc">+</span></span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Project1_files/figure-html/unnamed-chunk-20-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate mean GRPIP for each category</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>mean_grpip <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(GRPIP <span class="sc">~</span> transport_category, <span class="at">data =</span> transport_rent_data, mean)</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"Mean GRPIP by transportation category:"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Mean GRPIP by transportation category:"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(mean_grpip)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  transport_category    GRPIP
+1                Car 32.89993
+2   Public Transport 39.07944</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Additional: Count of users in each category</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>user_counts <span class="ot">&lt;-</span> <span class="fu">table</span>(transport_rent_data<span class="sc">$</span>transport_category)</span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"Number of users in each category:"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Number of users in each category:"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(user_counts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+             Car Public Transport 
+            5456              214 </code></pre>
 </div>
 </div>
 

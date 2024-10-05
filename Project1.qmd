@@ -329,6 +329,7 @@ print(everything)
 
 ```{r}
 
+
 summary.census <- function(object, numeric_vars = NULL, categorical_vars = NULL) {
   
   #convert JWAP and JWDP into numeric variables
@@ -411,15 +412,15 @@ summary.census <- function(object, numeric_vars = NULL, categorical_vars = NULL)
     category_mappings <- list(
       FER = c("0" = "N/A", "1" = "Yes", "2" = "No"),
       SEX = c("1" = "Male", "2" = "Female"),
-      SCHL = c("01" = "No schooling completed",
-               "02" = "Nursery school, preschool",
-               "03" = "Kindergarten",
-               "04" = "Grade 1",
-               "05" = "Grade 2",
-               "06" = "Grade 3",
-               "07" = "Grade 4",
-               "08" = "Grade 5",
-               "09" = "Grade 6",
+      SCHL = c("1" = "No schooling completed",
+               "2" = "Nursery school, preschool",
+               "3" = "Kindergarten",
+               "4" = "Grade 1",
+               "5" = "Grade 2",
+               "6" = "Grade 3",
+               "7" = "Grade 4",
+               "8" = "Grade 5",
+               "9" = "Grade 6",
                "10" = "Grade 7",
                "11" = "Grade 8",
                "12" = "Grade 9",
@@ -444,31 +445,43 @@ summary.census <- function(object, numeric_vars = NULL, categorical_vars = NULL)
       HISPEED = c("0" = "N/A (GQ/vacant/no paid access to the internet)",
                   "1" =  "Yes",
                   "2" = "No"),
-      JWTRNS = c("0" = "N/A",
-                 "10" = "Walked",
-                 "11" = "Worked from home",
-                 "12" = "Other method",
-                 "07" = "Taxicab",
-                 "02" = "Bus",
-                 "05" = "Light rail, streetcar, or trolley",
-                 "04" = "Long-distance train or commuter rail",
-                 "09" = "Bicycle",
-                 "01" = "Car, truck, or van",
-                 "03" = "Subway or elevated rail",
-                 "06" = "Ferryboat",
-                 "08" = "Motorcycle"),
+      
       SCH = c("0" = "N/A (less than 3 years old)",
               "1" = "No, has not attended in the last 3 months",
               "2" = "Yes, public school or public college",
-              "3" = "Yes, private school or college or home school")
-    )
+              "3" = "Yes, private school or college or home school"))
+      
     
     for (var in categorical_vars) {
       # Get counts
       counts <- table(object[[var]])
       
       # Apply mapping if available
-      if (var %in% names(category_mappings)) {
+      
+       # Special handling for SEX variable
+      if (var == "SEX") {
+        counts_to_use <- counts
+        names(counts_to_use) <- levels(object[[var]])  # Preserve original labels
+      }else   if (var == "JWTRNS") {
+      # Special handling for JWTRNS
+      jwtrns_mapping <- c(
+        "0" = "N/A",
+        "1" = "Car, truck, or van",
+        "2" = "Bus",
+        "3" = "Subway or elevated rail",
+        "4" = "Long-distance train or commuter rail",
+        "5" = "Light rail, streetcar, or trolley",
+        "6" = "Ferryboat",
+        "7" = "Taxicab",
+        "8" = "Motorcycle",
+        "9" = "Bicycle",
+        "10" = "Walked",
+        "11" = "Worked from home",
+        "12" = "Other method"
+      )
+      counts_to_use <- counts
+      names(counts_to_use) <- jwtrns_mapping[names(counts)]
+      } else if (var %in% names(category_mappings)) {
         mapped_counts <- counts
         names(mapped_counts) <- category_mappings[[var]][names(counts)]
         counts_to_use <- mapped_counts
@@ -491,13 +504,13 @@ summary.census <- function(object, numeric_vars = NULL, categorical_vars = NULL)
 
 ```
 
-Now Let's test our summary function
+Now Let's test our summary function. This will give us the weighted means and standard deviations for numeric variables and counts for categorical variables 
 
 ```{r}
 
 # Using default behavior (all variables)
 results1 <- summary.census(everything)
-head(results1)
+print(results1)
 
 ```
 
@@ -511,15 +524,7 @@ results <- summary.census(everything,
                   numeric_vars = c("AGEP", "GRPIP"),
                   categorical_vars = c("SEX", "FER"))
 
-head(results)
-```
-
-Let's access our results 
-
-```{r}
-# Access results
-results1$numeric_summary$Age$mean
-results1$categorical_summary$Sex
+print(results)
 ```
 
 
@@ -575,7 +580,177 @@ plot.census <- function(x, cat_var, num_var, ...) {
 Let's test the plot function
 
 ```{r}
-
-
+# Age distribution by sex
 plot(everything, cat_var = "SEX", num_var = "AGEP")
+
+# Travel time to work by sex
+plot(everything, cat_var = "SEX", num_var = "JWMNP")
+
+#Gross rent as percentage of income by household language
+plot(everything, cat_var = "HHL", num_var = "GRPIP")
 ```
+
+## Understanding the data and interpresting it using statistics
+Now we are all set! We can extract the data using main_query function and summaries it by summary.census function also we can create box plots using the plot function. Let's understand the relationship between different variables and interpret the data using our summary and plot functions.
+
+For example we would like to get the answers of following questions
+#### What is the overall age and gender distribution of the population?
+
+```{r}
+# Get summary statistics
+summary_stats <- summary.census(everything)
+print(summary_stats$numeric_summary$Age)
+print(summary_stats$categorical_summary$Sex)
+
+# Create an age distribution plot by gender
+plot(everything, cat_var = "SEX", num_var = "AGEP")
+
+```
+
+The summary statistics for age show:
+
+Mean age: 38.80 years
+Standard deviation: 22.43 years
+
+This indicates that:
+
+The average age of the population is about 39 years old.
+There's a considerable spread in ages, with a standard deviation of about 22 years. This suggests a diverse population with a mix of younger and older individuals.
+
+Gender Distribution
+ Male = 29,940 (50.03%)
+ Female = 29,901 (49.97%) 
+
+Which shows not much a difference in gender distribution
+
+#### How does the educational attainment vary across age groups and genders?
+
+```{r}
+# Create a plot of educational attainment by age, colored by gender
+ggplot(everything, aes(x = SCHL, y = AGEP, fill = SEX)) +
+  geom_boxplot() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(x = "Educational Attainment", y = "Age", fill = "Sex")
+
+# Create a contingency table of education by gender
+table(everything$SCHL, everything$SEX)
+```
+
+This analysis gives us a detailed picture of educational attainment patterns across age groups and genders in your population. It highlights the progress made in educational equality, particularly in higher education, while also pointing out areas where disparities still exist.
+
+From the contingency table we can compare the two groups (Male vs Female)
+  The most common education level for both genders is "21" (Bachelor's degree), followed by "16" (Regular     high school diploma).
+  Women tend to outnumber men in Associate's degrees (20) and Bachelor's degrees (21).
+    Men slightly outnumber women in Professional degrees beyond a bachelor's degree (23).
+
+From the box plot we observe following things
+
+  There's a wide range of ages for most education levels, indicating lifelong learning or varied             educational paths.
+  The median age generally increases with higher levels of educational attainment.
+  Lower education levels (0-9) show a wide age range, possibly indicating both young individuals still in     school and older individuals with limited formal education.
+  Higher education levels (16-24) show higher median ages, as expected.
+  There's a noticeable jump in median age for doctorate degrees (24), with females having a slightly         higher median age than males.
+  
+#### What are the most common means of transportation to work, and how do they relate to commute times?
+```{r}
+# Get summary of transportation methods
+summary_stats <- summary.census(everything)
+print(summary_stats$categorical_summary$`Means of transportation to work`)
+
+# Create a plot of commute times by transportation method
+plot(everything, cat_var = "JWTRNS", num_var = "JWMNP")
+```
+ This analysis gives us a clear picture of the transportation landscape in your population. The dominance of personal vehicles, the significant proportion of remote workers, and the relatively low usage of public transit are key findings that have important implications for urban planning, environmental policies, and quality of life in the area.
+ 
+  Non-commuters or Unspecified: The largest category is "N/A" (49.6%), which likely includes non-workers, remote workers, or those with unspecified commute methods.
+  
+  Vehicle Dominance: Among those who commute, personal vehicles (car, truck, or van) are overwhelmingly the most common method, used by 36.0% of the total population and 70.9% of specified commuters.
+Remote Work Trend: A significant portion (11.4%) work from home, reflecting modern work trends and potentially impacting traditional commute patterns.
+
+  Active Transportation: Walking (1.4%) and cycling (0.6%) combined account for 2% of commuters, representing a small but notable group using active transportation.
+  
+  Public Transit: All forms of public transit (bus, light rail, subway, train) combined account for only about 0.7% of commuters, suggesting limited public transit infrastructure or usage.
+  
+  Alternative Methods: Motorcycles, taxicabs, and ferryboats are used by a very small fraction of commuters, likely reflecting niche transportation needs or preferences.
+  
+#### Is there a relationship between household language and economic indicators like rent burden?
+
+```{r}
+# Create a plot of rent burden by household language
+plot(everything, cat_var = "HHL", num_var = "GRPIP")
+
+
+```
+
+This analysis provides insights into the relationship between household language and rent burden, addressing the question about the connection between household language and economic indicators. The data suggests that there are indeed significant differences in economic stress related to housing costs across different language groups.
+
+1. Language Disparities: There's a clear disparity in rent burden across language groups, with English-only households generally facing lower rent burdens.
+
+2. Vulnerable Groups: Spanish-speaking households and those speaking "Other Languages" appear to face the highest rent burdens, suggesting greater economic vulnerability.
+
+Variability Within Groups: All language groups show significant variability in rent burden, indicating that factors beyond language (such as income, location, or occupation) play important roles.
+3. Outlines: All groups have outliers with extremely high rent burdens (over 75% of income), but these are more prevalent in non-English speaking households.
+
+4. Economic Integration: The overlap in distributions suggests that while there are trends, language alone doesn't determine economic status or rent burden.
+
+#### Is there any relationship between the Mean of Transportation and Rent Burden
+
+```{r}
+# Reclassify transportation categories
+everything$transport_category <- case_when(
+  everything$JWTRNS == "1" ~ "Car",
+  everything$JWTRNS %in% c("2", "3", "4", "5", "7") ~ "Public Transport",
+  TRUE ~ "Other"
+)
+
+# Filter for car and public transport users with non-zero GRPIP
+transport_rent_data <- everything[everything$transport_category %in% c("Car", "Public Transport") & everything$GRPIP > 0, ]
+
+# Ensure transport_category is a factor
+transport_rent_data$transport_category <- factor(transport_rent_data$transport_category)
+
+# Summary statistics
+car_summary <- summary(transport_rent_data$GRPIP[transport_rent_data$transport_category == "Car"])
+pt_summary <- summary(transport_rent_data$GRPIP[transport_rent_data$transport_category == "Public Transport"])
+
+print("Summary for Car Users:")
+print(car_summary)
+
+print("Summary for Public Transport Users:")
+print(pt_summary)
+
+# Visualization: Boxplot
+library(ggplot2)
+
+ggplot(transport_rent_data, aes(x = transport_category, y = GRPIP, fill = transport_category)) +
+  geom_boxplot() +
+  labs(title = "Rent Burden by Transportation Method",
+       x = "Transportation Method",
+       y = "Gross Rent as Percentage of Household Income") +
+  theme_minimal()
+
+# T-test to compare means
+t_test_result <- t.test(GRPIP ~ transport_category, data = transport_rent_data)
+print("T-test result:")
+print(t_test_result)
+
+# Visualization: Density plot
+ggplot(transport_rent_data, aes(x = GRPIP, fill = transport_category)) +
+  geom_density(alpha = 0.5) +
+  labs(title = "Distribution of Rent Burden by Transportation Method",
+       x = "Gross Rent as Percentage of Household Income",
+       y = "Density") +
+  theme_minimal()
+
+# Calculate mean GRPIP for each category
+mean_grpip <- aggregate(GRPIP ~ transport_category, data = transport_rent_data, mean)
+print("Mean GRPIP by transportation category:")
+print(mean_grpip)
+
+# Additional: Count of users in each category
+user_counts <- table(transport_rent_data$transport_category)
+print("Number of users in each category:")
+print(user_counts)
+
+```
+
