@@ -591,7 +591,7 @@ plot(everything, cat_var = "HHL", num_var = "GRPIP")
 ```
 
 ## Understanding the data and interpresting it using statistics
-Now we are all set! We can extract the data using main_query function and summaries it by summary.census function also we can create box plots using the plot function. Let's understand the relationship between different variables and interpret the data using our summary and plot functions.
+Now we are all set! We can extract the data using `main_query function` and summaries it by `summary.census function` also we can create box plots using the `plot function`. Let's understand the relationship between different variables and interpret the data using our summary and plot functions.
 
 For example we would like to get the answers of following questions
 #### What is the overall age and gender distribution of the population?
@@ -607,17 +607,17 @@ plot(everything, cat_var = "SEX", num_var = "AGEP")
 
 ```
 
-The summary statistics for age show:
+**The summary statistics for age show:**
 
 Mean age: 38.80 years
 Standard deviation: 22.43 years
 
-This indicates that:
+**This indicates that:**
 
 The average age of the population is about 39 years old.
 There's a considerable spread in ages, with a standard deviation of about 22 years. This suggests a diverse population with a mix of younger and older individuals.
 
-Gender Distribution
+**Gender Distribution**
  Male = 29,940 (50.03%)
  Female = 29,901 (49.97%) 
 
@@ -662,16 +662,16 @@ plot(everything, cat_var = "JWTRNS", num_var = "JWMNP")
 ```
  This analysis gives us a clear picture of the transportation landscape in your population. The dominance of personal vehicles, the significant proportion of remote workers, and the relatively low usage of public transit are key findings that have important implications for urban planning, environmental policies, and quality of life in the area.
  
-  Non-commuters or Unspecified: The largest category is "N/A" (49.6%), which likely includes non-workers, remote workers, or those with unspecified commute methods.
+  *Non-commuters or Unspecified:* The largest category is "N/A" (49.6%), which likely includes non-workers, remote workers, or those with unspecified commute methods.
   
-  Vehicle Dominance: Among those who commute, personal vehicles (car, truck, or van) are overwhelmingly the most common method, used by 36.0% of the total population and 70.9% of specified commuters.
+  *Vehicle Dominance:* Among those who commute, personal vehicles (car, truck, or van) are overwhelmingly the most common method, used by 36.0% of the total population and 70.9% of specified commuters.
 Remote Work Trend: A significant portion (11.4%) work from home, reflecting modern work trends and potentially impacting traditional commute patterns.
 
-  Active Transportation: Walking (1.4%) and cycling (0.6%) combined account for 2% of commuters, representing a small but notable group using active transportation.
+  *Active Transportation:* Walking (1.4%) and cycling (0.6%) combined account for 2% of commuters, representing a small but notable group using active transportation.
   
-  Public Transit: All forms of public transit (bus, light rail, subway, train) combined account for only about 0.7% of commuters, suggesting limited public transit infrastructure or usage.
+  *Public Transit:* All forms of public transit (bus, light rail, subway, train) combined account for only about 0.7% of commuters, suggesting limited public transit infrastructure or usage.
   
-  Alternative Methods: Motorcycles, taxicabs, and ferryboats are used by a very small fraction of commuters, likely reflecting niche transportation needs or preferences.
+  *Alternative Methods:* Motorcycles, taxicabs, and ferryboats are used by a very small fraction of commuters, likely reflecting niche transportation needs or preferences.
   
 #### Is there a relationship between household language and economic indicators like rent burden?
 
@@ -684,14 +684,15 @@ plot(everything, cat_var = "HHL", num_var = "GRPIP")
 
 This analysis provides insights into the relationship between household language and rent burden, addressing the question about the connection between household language and economic indicators. The data suggests that there are indeed significant differences in economic stress related to housing costs across different language groups.
 
-1. Language Disparities: There's a clear disparity in rent burden across language groups, with English-only households generally facing lower rent burdens.
+*1. Language Disparities:* There's a clear disparity in rent burden across language groups, with English-only households generally facing lower rent burdens.
 
-2. Vulnerable Groups: Spanish-speaking households and those speaking "Other Languages" appear to face the highest rent burdens, suggesting greater economic vulnerability.
+*2. Vulnerable Groups:* Spanish-speaking households and those speaking "Other Languages" appear to face the highest rent burdens, suggesting greater economic vulnerability.
 
-Variability Within Groups: All language groups show significant variability in rent burden, indicating that factors beyond language (such as income, location, or occupation) play important roles.
-3. Outlines: All groups have outliers with extremely high rent burdens (over 75% of income), but these are more prevalent in non-English speaking households.
+*3.Variability Within Groups:* All language groups show significant variability in rent burden, indicating that factors beyond language (such as income, location, or occupation) play important roles.
 
-4. Economic Integration: The overlap in distributions suggests that while there are trends, language alone doesn't determine economic status or rent burden.
+*4. Outlines:* All groups have outliers with extremely high rent burdens (over 75% of income), but these are more prevalent in non-English speaking households.
+
+*5. Economic Integration:* The overlap in distributions suggests that while there are trends, language alone doesn't determine economic status or rent burden.
 
 #### Is there any relationship between the Mean of Transportation and Rent Burden
 

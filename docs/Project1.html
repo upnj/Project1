@@ -977,7 +977,7 @@ $categorical_summary$`Gave birth to child within the past 12 months`
 </section>
 <section id="understanding-the-data-and-interpresting-it-using-statistics" class="level2">
 <h2 class="anchored" data-anchor-id="understanding-the-data-and-interpresting-it-using-statistics">Understanding the data and interpresting it using statistics</h2>
-<p>Now we are all set! We can extract the data using main_query function and summaries it by summary.census function also we can create box plots using the plot function. Let’s understand the relationship between different variables and interpret the data using our summary and plot functions.</p>
+<p>Now we are all set! We can extract the data using <code>main_query function</code> and summaries it by <code>summary.census function</code> also we can create box plots using the <code>plot function</code>. Let’s understand the relationship between different variables and interpret the data using our summary and plot functions.</p>
 <p>For example we would like to get the answers of following questions #### What is the overall age and gender distribution of the population?</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get summary statistics</span></span>
@@ -1005,11 +1005,11 @@ $sd
 </div>
 </div>
 </div>
-<p>The summary statistics for age show:</p>
+<p><strong>The summary statistics for age show:</strong></p>
 <p>Mean age: 38.80 years Standard deviation: 22.43 years</p>
-<p>This indicates that:</p>
+<p><strong>This indicates that:</strong></p>
 <p>The average age of the population is about 39 years old. There’s a considerable spread in ages, with a standard deviation of about 22 years. This suggests a diverse population with a mix of younger and older individuals.</p>
-<p>Gender Distribution Male = 29,940 (50.03%) Female = 29,901 (49.97%)</p>
+<p><strong>Gender Distribution</strong> Male = 29,940 (50.03%) Female = 29,901 (49.97%)</p>
 <p>Which shows not much a difference in gender distribution</p>
 <section id="how-does-the-educational-attainment-vary-across-age-groups-and-genders" class="level4">
 <h4 class="anchored" data-anchor-id="how-does-the-educational-attainment-vary-across-age-groups-and-genders">How does the educational attainment vary across age groups and genders?</h4>
@@ -1096,11 +1096,11 @@ $sd
 </div>
 </div>
 <p>This analysis gives us a clear picture of the transportation landscape in your population. The dominance of personal vehicles, the significant proportion of remote workers, and the relatively low usage of public transit are key findings that have important implications for urban planning, environmental policies, and quality of life in the area.</p>
-<p>Non-commuters or Unspecified: The largest category is “N/A” (49.6%), which likely includes non-workers, remote workers, or those with unspecified commute methods.</p>
-<p>Vehicle Dominance: Among those who commute, personal vehicles (car, truck, or van) are overwhelmingly the most common method, used by 36.0% of the total population and 70.9% of specified commuters. Remote Work Trend: A significant portion (11.4%) work from home, reflecting modern work trends and potentially impacting traditional commute patterns.</p>
-<p>Active Transportation: Walking (1.4%) and cycling (0.6%) combined account for 2% of commuters, representing a small but notable group using active transportation.</p>
-<p>Public Transit: All forms of public transit (bus, light rail, subway, train) combined account for only about 0.7% of commuters, suggesting limited public transit infrastructure or usage.</p>
-<p>Alternative Methods: Motorcycles, taxicabs, and ferryboats are used by a very small fraction of commuters, likely reflecting niche transportation needs or preferences.</p>
+<p><em>Non-commuters or Unspecified:</em> The largest category is “N/A” (49.6%), which likely includes non-workers, remote workers, or those with unspecified commute methods.</p>
+<p><em>Vehicle Dominance:</em> Among those who commute, personal vehicles (car, truck, or van) are overwhelmingly the most common method, used by 36.0% of the total population and 70.9% of specified commuters. Remote Work Trend: A significant portion (11.4%) work from home, reflecting modern work trends and potentially impacting traditional commute patterns.</p>
+<p><em>Active Transportation:</em> Walking (1.4%) and cycling (0.6%) combined account for 2% of commuters, representing a small but notable group using active transportation.</p>
+<p><em>Public Transit:</em> All forms of public transit (bus, light rail, subway, train) combined account for only about 0.7% of commuters, suggesting limited public transit infrastructure or usage.</p>
+<p><em>Alternative Methods:</em> Motorcycles, taxicabs, and ferryboats are used by a very small fraction of commuters, likely reflecting niche transportation needs or preferences.</p>
 </section>
 <section id="is-there-a-relationship-between-household-language-and-economic-indicators-like-rent-burden" class="level4">
 <h4 class="anchored" data-anchor-id="is-there-a-relationship-between-household-language-and-economic-indicators-like-rent-burden">Is there a relationship between household language and economic indicators like rent burden?</h4>
@@ -1116,14 +1116,11 @@ $sd
 </div>
 </div>
 <p>This analysis provides insights into the relationship between household language and rent burden, addressing the question about the connection between household language and economic indicators. The data suggests that there are indeed significant differences in economic stress related to housing costs across different language groups.</p>
-<ol type="1">
-<li><p>Language Disparities: There’s a clear disparity in rent burden across language groups, with English-only households generally facing lower rent burdens.</p></li>
-<li><p>Vulnerable Groups: Spanish-speaking households and those speaking “Other Languages” appear to face the highest rent burdens, suggesting greater economic vulnerability.</p></li>
-</ol>
-<p>Variability Within Groups: All language groups show significant variability in rent burden, indicating that factors beyond language (such as income, location, or occupation) play important roles. 3. Outlines: All groups have outliers with extremely high rent burdens (over 75% of income), but these are more prevalent in non-English speaking households.</p>
-<ol start="4" type="1">
-<li>Economic Integration: The overlap in distributions suggests that while there are trends, language alone doesn’t determine economic status or rent burden.</li>
-</ol>
+<p><em>1. Language Disparities:</em> There’s a clear disparity in rent burden across language groups, with English-only households generally facing lower rent burdens.</p>
+<p><em>2. Vulnerable Groups:</em> Spanish-speaking households and those speaking “Other Languages” appear to face the highest rent burdens, suggesting greater economic vulnerability.</p>
+<p><em>3.Variability Within Groups:</em> All language groups show significant variability in rent burden, indicating that factors beyond language (such as income, location, or occupation) play important roles.</p>
+<p><em>4. Outlines:</em> All groups have outliers with extremely high rent burdens (over 75% of income), but these are more prevalent in non-English speaking households.</p>
+<p><em>5. Economic Integration:</em> The overlap in distributions suggests that while there are trends, language alone doesn’t determine economic status or rent burden.</p>
 </section>
 <section id="is-there-any-relationship-between-the-mean-of-transportation-and-rent-burden" class="level4">
 <h4 class="anchored" data-anchor-id="is-there-any-relationship-between-the-mean-of-transportation-and-rent-burden">Is there any relationship between the Mean of Transportation and Rent Burden</h4>
