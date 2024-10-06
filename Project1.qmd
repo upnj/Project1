@@ -25,6 +25,7 @@ library(dplyr)
 library(tidycensus)
 library(lubridate)
 library(tibble)
+library(ggplot2)
 ```
 ## PART I Obtaining the Data from PUMS API
 
@@ -531,9 +532,12 @@ print(results)
 ### Plot Function
 
 ```{r}
-library(ggplot2)
-
-plot.census <- function(x, cat_var, num_var, ...) {
+plot.census <- function(x, cat_var, num_var, 
+                        title = NULL, 
+                        x_label = NULL, 
+                        y_label = NULL, 
+                        fill_colors = c("#1f77b4", "#ff7f0e"),
+                        ...) {
   # Check if the object is of class "census"
   if (!inherits(x, "census")) {
     stop("This function only works for objects of class 'census'")
@@ -562,12 +566,25 @@ plot.census <- function(x, cat_var, num_var, ...) {
     stop(paste(num_var, "must be a numeric variable"))
   }
   
+  # Set default labels if not provided
+  if (is.null(title)) {
+    title <- paste("Weighted Boxplot of", num_var, "by", cat_var)
+  }
+  if (is.null(x_label)) {
+    x_label <- cat_var
+  }
+  if (is.null(y_label)) {
+    y_label <- num_var
+  }
+  
   # Create the plot
-  p <- ggplot(x, aes(x = .data[[cat_var]], y = .data[[num_var]], weight = PWGTP)) +
+  p <- ggplot(x, aes(x = .data[[cat_var]], y = .data[[num_var]], weight = PWGTP, fill = .data[[cat_var]])) +
     geom_boxplot() +
-    labs(x = cat_var, y = num_var, title = paste("Weighted Boxplot of", num_var, "by", cat_var)) +
+    labs(title = title, x = x_label, y = y_label) +
+    scale_fill_manual(values = fill_colors) +
     theme_minimal() +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+    theme(axis.text.x = element_text(angle = 45, hjust = 1),
+          legend.position = "none")  # Remove legend as it's redundant with x-axis labels
   
   # Print the plot
   print(p)
@@ -581,13 +598,39 @@ Let's test the plot function
 
 ```{r}
 # Age distribution by sex
-plot(everything, cat_var = "SEX", num_var = "AGEP")
+
+plot.census(everything, 
+            cat_var = "SEX", 
+            num_var = "AGEP",
+            title = "Age Distribution by Sex",
+            x_label = "Sex",
+            y_label = "Age",
+            fill_colors = c("#FFA07A", "#20B2AA"))
 
 # Travel time to work by sex
-plot(everything, cat_var = "SEX", num_var = "JWMNP")
+plot.census(everything, 
+            cat_var = "SEX", 
+            num_var = "JWMNP",
+            title = "Travel Time to Work by Sex",
+            x_label = "Sex",
+            y_label = "Travel Time (minutes)",
+            fill_colors = c("#4E79A7", "#F28E2B"))
 
 #Gross rent as percentage of income by household language
-plot(everything, cat_var = "HHL", num_var = "GRPIP")
+
+# Create a color palette for the number of language categories
+num_languages <- length(unique(everything$HHL))
+color_palette <- colorRampPalette(c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b"))(num_languages)
+
+# Create the plot
+rent_language_plot <- plot.census(everything, 
+                                  cat_var = "HHL", 
+                                  num_var = "GRPIP",
+                                  title = "Gross Rent as Percentage of Household Income by Household    
+                                           Language",
+                                  x_label = "Household Language",
+                                  y_label = "Gross Rent as Percentage of Income",
+                                  fill_colors = color_palette)
 ```
 
 ## Understanding the data and interpresting it using statistics
@@ -603,7 +646,14 @@ print(summary_stats$numeric_summary$Age)
 print(summary_stats$categorical_summary$Sex)
 
 # Create an age distribution plot by gender
-plot(everything, cat_var = "SEX", num_var = "AGEP")
+age_gender_plot <- plot.census(everything, 
+                               cat_var = "SEX", 
+                               num_var = "AGEP",
+                               title = "Age Distribution by Gender",
+                               x_label = "Gender",
+                               y_label = "Age",
+                               fill_colors = c("#FF9999", "#66B2FF"))
+
 
 ```
 
@@ -721,7 +771,7 @@ print("Summary for Public Transport Users:")
 print(pt_summary)
 
 # Visualization: Boxplot
-library(ggplot2)
+
 
 ggplot(transport_rent_data, aes(x = transport_category, y = GRPIP, fill = transport_category)) +
   geom_boxplot() +
