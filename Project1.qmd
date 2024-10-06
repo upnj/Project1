@@ -1,5 +1,5 @@
 ---
-title: "ST: 558, Project 1"
+title: "ST: 558 Project 1"
 author: "Upendra Joshi & John Tuong"
 warning: false
 format: html
@@ -755,3 +755,61 @@ print(user_counts)
 
 ```
 
+**Summary Statistics:**
+
+*Car Users:* Mean GRPIP = 32.9%, Median = 26%
+*Public Transport Users:* Mean GRPIP = 39.1%, Median = 31%
+
+
+**Boxplot Analysis (Image 1):**
+
+The median rent burden for public transport users is higher than for car users.
+Public transport users show a wider interquartile range, indicating more variability in rent burden.
+Both groups have outliers, but public transport users have more extreme high outliers.
+
+
+**Density Plot Analysis (Image 2):**
+
+The distribution for car users is more peaked and concentrated around lower GRPIP values.
+Public transport users have a flatter, more spread-out distribution, with a higher density at higher GRPIP values.
+
+
+**T-test Results:**
+
+t-statistic: -3.4031
+p-value: 0.0007882 (highly significant)
+95% confidence interval: [-9.76, -2.60]
+The test indicates a statistically significant difference in mean GRPIP between car and public transport users.
+
+
+Mean GRPIP:
+
+Car: 32.90%
+Public Transport: 39.08%
+
+
+User Counts:
+
+Car: 5,456 users
+Public Transport: 214 users
+
+
+
+**Key Findings:**
+
+  1. Significant Difference: There is a statistically significant difference in rent burden between car       users and public transport users.
+  2. Higher Burden for Public Transport Users: On average, public transport users spend about 6.2% more       of their income on rent compared to car users.
+  3. Variability: Public transport users show more variability in their rent burden, with a wider range       of GRPIP values.
+  4. Predominance of Car Users: There's a much larger number of car users compared to public transport        users in the sample.
+  
+  
+## Summary and Conclusion
+In this project we extracted The Public Use Microdata Sample (PUMS) Census API (Application Programming Interface) using `main_query` function. The `summary.census` function is used to summarize the data.
+The `plot` function is used to plot the box plot. The data is analyzed to answer the key questions such as 
+  1. What is the overall age and gender distribution of the population?
+  2. Is there a relationship between household language and economic indicators like rent burden?
+  3. How does the educational attainment vary across age groups and genders?
+  4. What are the most common means of transportation to work, and how do they relate to commute times?
+  5. Is there any relationship between the Mean of Transportation and Rent Burden?
+  
+  In summary, there is no large gap between the gender distribution. The dominance of personal vehicles, the significant proportion of remote workers, and the relatively low usage of public transit are key findings. addressing the question about the connection between household language and economic indicators. The data suggests that there's a clear disparity in rent burden across language groups, with English-only households generally facing lower rent burdens. There's a noticeable jump in median age for doctorate degrees (24), with females having a slightly higher median age than males. While checking the relationship between the mean of transportation and rent burden **[we came to conclusion that the analysis reveals a strong relationship between transportation method choice and rent burden, with public transport users facing significantly higher housing cost burdens. This insight could be valuable for urban planners, policymakers, and researchers focusing on transportation equity and affordable housing initiatives.]**{.underline}    
