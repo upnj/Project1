@@ -177,12 +177,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 6 × 4
   SEX   PWGTP MAR   SCHL 
   &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;
-1 2     6     5     24   
-2 2     23    2     24   
-3 1     23    3     24   
-4 1     80    5     24   
-5 1     16    1     24   
-6 1     107   3     24   </code></pre>
+1 2     110   1     24   
+2 1     102   1     24   
+3 2     74    1     24   
+4 1     199   1     24   
+5 1     15    2     24   
+6 2     19    3     24   </code></pre>
 </div>
 </div>
 <ul>
@@ -480,16 +480,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 59,841 × 15
    PWGTP  GASP FER    AGEP GRPIP JWMNP HHL   HISPEED JWTRNS SCH   SCHL  SEX   
    &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt; &lt;fct&gt;   &lt;fct&gt;  &lt;fct&gt; &lt;fct&gt; &lt;fct&gt; 
- 1    70     3 2        18     0     0 0     0       11     2     18    Female
- 2    41     3 0        35     0     0 0     0       0      1     14    Male  
- 3    35     3 0        40     0     0 0     0       0      1     13    Male  
- 4    30     3 2        20     0     0 0     0       0      2     19    Female
- 5     4     3 0        14     0     0 0     0       0      2     11    Male  
- 6    75     3 2        28     0     0 0     0       0      1     16    Female
- 7    22     3 0        47     0     0 0     0       0      1     16    Male  
- 8    36     3 0        28     0     0 0     0       0      1     16    Male  
- 9    59     3 0        77     0     0 0     0       0      1     16    Female
-10    11     3 0        20     0     2 0     0       10     1     18    Male  
+ 1    76    50 2        49     0    30 1     1       1      1     20    Female
+ 2   110    50 0        52     0    20 1     1       1      1     17    Male  
+ 3   100    50 0        24     0     0 1     1       0      1     19    Male  
+ 4   126    50 0        25     0    10 1     1       1      1     21    Male  
+ 5   100    50 0        24     0    20 1     1       2      1     19    Male  
+ 6   113    50 0        44     0     0 4     1       11     1     21    Male  
+ 7   120    50 2        39     0     0 4     1       11     1     21    Female
+ 8   159    50 0         5     0     0 4     1       0      2     3     Female
+ 9   104    50 0         4     0     0 4     1       0      2     2     Male  
+10    91     3 0        63     0     0 1     1       0      1     18    Female
 # ℹ 59,831 more rows
 # ℹ 3 more variables: JWAP &lt;chr&gt;, JWDP &lt;chr&gt;, state &lt;chr&gt;</code></pre>
 </div>
@@ -1259,7 +1259,7 @@ sample estimates:
 <section id="summary-and-conclusion" class="level2">
 <h2 class="anchored" data-anchor-id="summary-and-conclusion">Summary and Conclusion</h2>
 <p>In this project we extracted The Public Use Microdata Sample (PUMS) Census API (Application Programming Interface) using <code>main_query</code> function. The <code>summary.census</code> function is used to summarize the data. The <code>plot</code> function is used to plot the box plot. The data is analyzed to answer the key questions such as 1. What is the overall age and gender distribution of the population? 2. Is there a relationship between household language and economic indicators like rent burden? 3. How does the educational attainment vary across age groups and genders? 4. What are the most common means of transportation to work, and how do they relate to commute times? 5. Is there any relationship between the Mean of Transportation and Rent Burden?</p>
-<p>In summary, there is no large gap between the gender distribution. The dominance of personal vehicles, the significant proportion of remote workers, and the relatively low usage of public transit are key findings. addressing the question about the connection between household language and economic indicators. The data suggests that there’s a clear disparity in rent burden across language groups, with English-only households generally facing lower rent burdens. There’s a noticeable jump in median age for doctorate degrees (24), with females having a slightly higher median age than males. While checking the relationship between the mean of transportation and rent burden <strong>[we came to conclusion that the analysis reveals a strong relationship between transportation method choice and rent burden, with public transport users facing significantly higher housing cost burdens. This insight could be valuable for urban planners, policymakers, and researchers focusing on transportation equity and affordable housing initiatives.]</strong>{.underline}</p>
+<p>In summary, there is no large gap between the gender distribution. The dominance of personal vehicles, the significant proportion of remote workers, and the relatively low usage of public transit are key findings. Addressing the question about the connection between household language and economic indicators, the data suggests that there’s a clear disparity in rent burden across language groups, with English-only households generally facing lower rent burdens. There’s a noticeable jump in median age for doctorate degrees (24), with females having a slightly higher median age than males. While checking the relationship between the mean of transportation and rent burden <span style="text-decoration: underline;">we came to conclusion that the analysis reveals a strong relationship between transportation method choice and rent burden, with public transport users facing significantly higher housing cost burdens. This insight could be valuable for urban planners, policymakers, and researchers focusing on transportation equity and affordable housing initiatives.</span></p>
 
 
 </section>
