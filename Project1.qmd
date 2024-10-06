@@ -677,6 +677,7 @@ Which shows not much a difference in gender distribution
 
 ```{r}
 # Create a plot of educational attainment by age, colored by gender
+
 ggplot(everything, aes(x = SCHL, y = AGEP, fill = SEX)) +
   geom_boxplot() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
@@ -708,7 +709,15 @@ summary_stats <- summary.census(everything)
 print(summary_stats$categorical_summary$`Means of transportation to work`)
 
 # Create a plot of commute times by transportation method
-plot(everything, cat_var = "JWTRNS", num_var = "JWMNP")
+plot.census(everything, 
+                            cat_var = "JWTRNS", 
+                            num_var = "JWMNP",
+                            title = "Commute Times by Transportation Method",
+                            x_label = "Transportation Method",
+                            y_label = "Commute Time (minutes)",
+                            fill_colors = colorRampPalette(c("#66c2a5", "#fc8d62", "#8da0cb", "#e78ac3", "#a6d854", "#ffd92f"))(length(levels(everything$JWTRNS))))
+
+
 ```
  This analysis gives us a clear picture of the transportation landscape in your population. The dominance of personal vehicles, the significant proportion of remote workers, and the relatively low usage of public transit are key findings that have important implications for urban planning, environmental policies, and quality of life in the area.
  
@@ -727,8 +736,14 @@ Remote Work Trend: A significant portion (11.4%) work from home, reflecting mode
 
 ```{r}
 # Create a plot of rent burden by household language
-plot(everything, cat_var = "HHL", num_var = "GRPIP")
 
+plot.census(everything, 
+                                  cat_var = "HHL", 
+                                  num_var = "GRPIP",
+                                  title = "Rent Burden by Household Language",
+                                  x_label = "Household Language",
+                                  y_label = "Gross Rent as Percentage of Household Income",
+                                  fill_colors = colorRampPalette(c("#66c2a5", "#fc8d62", "#8da0cb", "#e78ac3", "#a6d854"))(length(levels(everything$HHL))))
 
 ```
 
@@ -772,13 +787,13 @@ print(pt_summary)
 
 # Visualization: Boxplot
 
-
-ggplot(transport_rent_data, aes(x = transport_category, y = GRPIP, fill = transport_category)) +
-  geom_boxplot() +
-  labs(title = "Rent Burden by Transportation Method",
-       x = "Transportation Method",
-       y = "Gross Rent as Percentage of Household Income") +
-  theme_minimal()
+plot.census(transport_rent_data, 
+            cat_var = "transport_category", 
+            num_var = "GRPIP",
+            title = "Rent Burden by Transportation Method",
+            x_label = "Transportation Method",
+            y_label = "Gross Rent as Percentage of Household Income",
+            fill_colors = c("Car" = "#66c2a5", "Public Transport" = "#fc8d62"))
 
 # T-test to compare means
 t_test_result <- t.test(GRPIP ~ transport_category, data = transport_rent_data)
