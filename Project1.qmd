@@ -1,5 +1,5 @@
 ---
-title: "ST: 558 Project 1"
+title: "ST: 558 Project 1 R Functions for Query and Summarization of Public Use Microdata Sample (PUMS)          Census API (Application Programming Interface) data"
 author: "Upendra Joshi & John Tuong"
 warning: false
 format: html
@@ -51,13 +51,11 @@ head(initial_parse)
 ```{r}
 
 # Numeric variables
-num_vars <- c("AGEP", "GASP", "GRPIP", "JWMNP", "PWGTP")
+num_vars <- c("AGEP", "GASP", "GRPIP", "JWMNP", "PWGTP", "JWAP","JWDP")
 
 # Categorical variables
 cat_vars <- c("FER", "HHL", "HISPEED", "JWTRNS", "SCH", "SCHL", "SEX")
 
-# Time variables
-time_vars <- c("JWAP", "JWDP")
 
 # Geography variables
 geo_vars <- c("All", "Region", "Division", "State")
@@ -80,15 +78,15 @@ year_checker <- function(year) {
 }
 ```
 
--   Our second function, the num_checker, checks and coerces our assigned numeric and time variables to their respective data types. Due to the parsed JSON data, our data defaulted to a data type of character. Coercing the variables to the desired data type allows for meaning manipulation and analysis. This function contains 1 parameter and takes in 2 vectors, num_vars and time_vars, which is used to determine if the user input is of type num or time then converts it respectively to its desired data type. The function works by looping the column names from initial_parse. Each column name is checked to see if its name matches any from the 2 vectors, num_vars or time_vars. If the column name matches in num_vars, it will be converted to numeric through the use of as.numeric. Similarly with time_vars, it will be converted to a time format through the use of as.NUMERIC. Once the function finishes looping, it will return the modified tibble/dataframe.
+-   Our second function, the num_checker, checks and coerces our assigned numeric and time variables to their respective data types. Due to the parsed JSON data, our data defaulted to a data type of character. Coercing the variables to the desired data type allows for meaning manipulation and analysis. This function contains 1 parameter and takes in 1 vector, num_vars, which is used to determine if the user input is of type num or time then converts it respectively to its desired data type. The function works by looping the column names from initial_parse. Each column name is checked to see if its name matches any from the vector, num_vars. If the column name matches in num_vars, it will be converted to numeric through the use of as.numeric. Once the function finishes looping, it will return the modified tibble/dataframe.
 
 ```{r}
+
 # Numeric Checker
 # Function to convert columns to desired numeric and time data types
 
 num_checker <- function(initial_parse) {
-    num_vars <- c("AGEP", "GASP", "GRPIP", "JWMNP", "PWGTP")
-    time_vars <- c("JWAP", "JWDP")
+    num_vars <- c("AGEP", "GASP", "GRPIP", "JWMNP", "PWGTP", "JWAP","JWDP")
     col_names <- colnames(initial_parse) 
       for (name in col_names) {
          if (name %in% num_vars) {
@@ -468,6 +466,8 @@ print(results)
 
 ### Plot Function
 
+- The following function is created to generate box plots. This will take categorical values, numeric values, title for the plot, x-axis and y-axis label. The fill_color parameter decide the color of the plot.
+
 ```{r}
 plot.census <- function(x, cat_var, num_var, 
                         title = NULL, 
@@ -574,7 +574,9 @@ rent_language_plot <- plot.census(everything,
 
 Now we are all set! We can extract the data using `main_query function` and summaries it by `summary.census function` also we can create box plots using the `plot function`. Let's understand the relationship between different variables and interpret the data using our summary and plot functions.
 
-For example we would like to get the answers of following questions \#### What is the overall age and gender distribution of the population?
+For example we would like to get the answers of following questions 
+
+#### What is the overall age and gender distribution of the population?
 
 ```{r}
 # Get summary statistics
@@ -780,6 +782,6 @@ Car: 5,456 users Public Transport: 214 users
 
 ## Summary and Conclusion
 
-In this project we extracted The Public Use Microdata Sample (PUMS) Census API (Application Programming Interface) using `main_query` function. The `summary.census` function is used to summarize the data. This main_query function acts as an important tool for researchers and others to quickly access data from the U.S. Census in a customizable way to create tibbles for analysis regarding the U.S. population and housing units. The `plot` function is used to plot the box plot. The data is analyzed to answer the key questions such as 1. What is the overall age and gender distribution of the population? 2. Is there a relationship between household language and economic indicators like rent burden? 3. How does the educational attainment vary across age groups and genders? 4. What are the most common means of transportation to work, and how do they relate to commute times? 5. Is there any relationship between the Mean of Transportation and Rent Burden?
+In this project we extracted The Public Use Microdata Sample (PUMS) Census API (Application Programming Interface) using `main_query` function. This main_query function acts as an important tool for researchers and others to quickly access data from the U.S. Census in a customizable way to create tibbles for analysis regarding the U.S. population and housing units. The `summary.census` function is used to summarize the data.  The `plot` function is used to plot the box plot. The data is analyzed to answer the key questions such as 1. What is the overall age and gender distribution of the population? 2. Is there a relationship between household language and economic indicators like rent burden? 3. How does the educational attainment vary across age groups and genders? 4. What are the most common means of transportation to work, and how do they relate to commute times? 5. Is there any relationship between the Mean of Transportation and Rent Burden?
 
 In summary, there is no large gap between the gender distribution. The dominance of personal vehicles, the significant proportion of remote workers, and the relatively low usage of public transit are key findings. Addressing the question about the connection between household language and economic indicators, the data suggests that there's a clear disparity in rent burden across language groups, with English-only households generally facing lower rent burdens. There's a noticeable jump in median age for doctorate degrees (24), with females having a slightly higher median age than males. While checking the relationship between the mean of transportation and rent burden [we came to conclusion that the analysis reveals a strong relationship between transportation method choice and rent burden, with public transport users facing significantly higher housing cost burdens. This insight could be valuable for urban planners, policymakers, and researchers focusing on transportation equity and affordable housing initiatives.]{style="text-decoration: underline;"}
