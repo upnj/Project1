@@ -7,6 +7,7 @@ editor: visual
 editor_options: 
   chunk_output_type: console
 ---
+
 # Introduction
 
 -   The Public Use Microdata Sample (PUMS) Census API (Application Programming Interface) is a collection of data files from the United States Census Bureau that provides access to data samples of the U.S. population and housing units. More specifically, these PUMS data sets cover the HUD's (U.S. Department of Housing and Urban Development) largest rental assistance programs (Public Housing, Section 8, etc). This data is compiled from responses to the American Community Surveys (ACS). The PUMS is comprised of two files: one for person records and the other for housing unit records. It includes geographic and household information including, but not limited to: family type, household income, race, gender, etc. The PUMS' data sets are valuable sources of information to policymakers and the researchers, as it can give some insight on how to better allocate resources and focus on helping those who need it the most.
@@ -17,7 +18,6 @@ editor_options:
 
 ```{r}
 # Loading packages
-#install.packages("quantreg")
 library(tidyverse)
 library(httr)
 library(jsonlite)
@@ -26,12 +26,15 @@ library(tidycensus)
 library(lubridate)
 library(tibble)
 library(ggplot2)
+library(quantreg)
 ```
+
 ## PART I Obtaining the Data from PUMS API
 
 -   Next, we are going to show how URL can interact with the PUMS' API. Typically we'd start with a more bare URL when building a URL from scratch (more on that later), but I ended choosing this one because it provided a more visually appealing output as an example. After setting up the URL and making a GET, request to PUMS' API (a request sent to a server asking an API to provide a service/information), we'll take that raw data, and parse it into JSON. The initial_parse returns a tibble with the column names on the first row, so we extract those names and set them as the column names. Then we drop the first row and print a nice little tibble to get a glimpse of what information the example_url contains (take a look below!). Here we have a small tibble, 6x4, because we used the function head. These are the steps to querying APIs. So in short, we assign a URL, formulate the API request, send it, allow time to handle the response, and process the data.
 
 ```{r}
+
 # Sample API call, transformed to tibble
 example_url <- "https://api.census.gov/data/2022/acs/acs1/pums?get=SEX,PWGTP,MAR&SCHL=24"
 initial_response <- GET(url = example_url)
@@ -46,6 +49,7 @@ head(initial_parse)
 -   To keep things simple and organized, below are all of the variables and their assigned values. Here we created vectors for each variable to reference later on.
 
 ```{r}
+
 # Numeric variables
 num_vars <- c("AGEP", "GASP", "GRPIP", "JWMNP", "PWGTP")
 
@@ -65,6 +69,7 @@ combined_vars <- c("AGEP", "GASP", "GRPIP", "JWMNP", "PWGTP", "FER", "HHL", "HIS
 -   Next we'll dive into all of the functions we made in order to create our main API query. The first one we have is the year_checker function. Our if statement here only allows the function to pass if the year is between 2010 to 2022 (values are inclusive). However, if the year falls outside of the range, a stop function will raise an error message and cease execution of the code.
 
 ```{r}
+
 # Year Checker
 # Function to check if entered year is valid
 
@@ -75,11 +80,11 @@ year_checker <- function(year) {
 }
 ```
 
--   Our second function, the num_checker, checks and coerces our assigned numeric and time variables to their respective data types. Due to the parsed JSON data, our data defaulted to a data type of character. Coercing the variables to the desired data type allows for meaning manipulation and analysis. This function contains 1 parameter and takes in 2 vectors, num_vars and time_vars, which is used to determine if the user input is of type num or time then converts it respectively to its desired data type. The function works by looping the column names from initial_parse. Each column name is checked to see if its name matches any from the 2 vectors, num_vars or time_vars. If the column name matches in num_vars, it will be converted to numeric through the use of as.numeric. Similarly with time_vars, it will be converted to a time format through the use of as.POSIXct. Once the function finishes looping, it will return the modified tibble/dataframe.
+-   Our second function, the num_checker, checks and coerces our assigned numeric and time variables to their respective data types. Due to the parsed JSON data, our data defaulted to a data type of character. Coercing the variables to the desired data type allows for meaning manipulation and analysis. This function contains 1 parameter and takes in 2 vectors, num_vars and time_vars, which is used to determine if the user input is of type num or time then converts it respectively to its desired data type. The function works by looping the column names from initial_parse. Each column name is checked to see if its name matches any from the 2 vectors, num_vars or time_vars. If the column name matches in num_vars, it will be converted to numeric through the use of as.numeric. Similarly with time_vars, it will be converted to a time format through the use of as.NUMERIC. Once the function finishes looping, it will return the modified tibble/dataframe.
 
 ```{r}
 # Numeric Checker
-# Function to convert columns to desired numeric data types
+# Function to convert columns to desired numeric and time data types
 
 num_checker <- function(initial_parse) {
     num_vars <- c("AGEP", "GASP", "GRPIP", "JWMNP", "PWGTP")
@@ -91,101 +96,13 @@ num_checker <- function(initial_parse) {
             initial_parse[[name]] <- as.numeric(initial_parse[[name]])
             
          }
-        if (name %in% time_vars) {
-            print(name)   
-            #initial_parse[[name]] <- as.POSIXct(initial_parse[[name]], format = "%H:%M")
-            
-        }
+     
       }
     return(initial_parse)
 }
 
 # Testing purposes/example
-# initial_parse <- num_checker(initial_parse)
-```
-
--   Our time checker function works to change our time_vars into desired time data tpes.
-
-```{r}
-
-# Time Checker - NOT FINISHED
-# Function to convert columns to desired time data types
-# Currently NOT a function yet, but almost
-
-# JWAP - Example J. Post to use* remember to clean these
-temp <- httr::GET("https://api.census.gov/data/2022/acs/acs1/pums/variables/JWAP.json")
-#turn it into a list
-temp_list <- temp$content |> rawToChar() |>jsonlite::fromJSON()
-#grab just the names of JWAP and their values
-JWAP <- temp_list$values$item
-#reorder just so it is clearer
-JWAP_values <- JWAP[sort(names(JWAP))]
-
-
-count = 1
-for (a in JWAP_values){
-    if(a!="N/A (not a worker; worker who worked from home)"){
-        time_list = list()
-        time_split <- strsplit(a, " to ")
-        for (i in time_split[[1]]) {
-          #print(i)
-          i <- gsub("\\.",'',i)
-          i <- gsub(" ",'', i)
-          date_time <- strptime(i, format = "%I:%M%p")
-          sec_since_mn <- as.numeric(difftime(date_time, as.POSIXct("00:00", format = "%H:%M"), units = "secs"))
-          time_list <- append(time_list, sec_since_mn)
-        }
-          JWAP_values[[count]] <- (time_list[[1]] + time_list[[2]]) / 2
-          avg_time<- (time_list[[1]] + time_list[[2]]) / 2
-          avg_time2 <- as.POSIXct(avg_time, origin = "1970-01-01", tz = "UTC")
-          JWAP_values[[count]] <- strftime(avg_time2, format = "%I:%M%p")
-          
-    }
-
-  else JWAP_values[[count]] <- a
-  count = count + 1
-}
-
-
-
-
-
-# JWDP - Example J. Post to use* remember to clean these
-temp <- httr::GET("https://api.census.gov/data/2022/acs/acs1/pums/variables/JWDP.json")
-#turn it into a list
-temp_list <- temp$content |> rawToChar() |>jsonlite::fromJSON()
-#grab just the names of JWDP and their values
-JWDP <- temp_list$values$item
-#reorder just so it is clearer
-JWDP_values <- JWDP[sort(names(JWDP))]
-
-
-count = 1
-for (a in JWDP_values){
-    if(a!="N/A (not a worker; worker who worked from home)"){
-        time_list = list()
-        time_split <- strsplit(a, " to ")
-        for (i in time_split[[1]]) {
-          #print(i)
-          i <- gsub("\\.",'',i)
-          i <- gsub(" ",'', i)
-          date_time <- strptime(i, format = "%I:%M%p")
-          sec_since_mn <- as.numeric(difftime(date_time, as.POSIXct("00:00", format = "%H:%M"), units = "secs"))
-          time_list <- append(time_list, sec_since_mn)
-        }
-          JWDP_values[[count]] <- (time_list[[1]] + time_list[[2]]) / 2
-          avg_time<- (time_list[[1]] + time_list[[2]]) / 2
-          avg_time2 <- as.POSIXct(avg_time, origin = "1970-01-01", tz = "UTC")
-          JWDP_values[[count]] <- strftime(avg_time2, format = "%I:%M%p")
-          
-    }
-
-  else JWDP_values[[count]] <- a
-  count = count + 1
-}
-
-
-
+initial_parse <- num_checker(initial_parse)
 ```
 
 -   Categorical checker works similarly to the numeric checker. This function contains 1 parameter and takes in 1 vector, which is used to determine if the user input is of type factor then converts it respectively to its desired data type.
@@ -194,6 +111,7 @@ for (a in JWDP_values){
 # Categorical checker
 # Function to convert columns to desired factor data types
 
+
 cat_checker <- function(initial_parse) {
     cat_vars <- c("FER", "HHL", "HISPEED", "JWTRNS", "SCH", "SCHL", "SEX")
     col_names <- colnames(initial_parse) 
@@ -201,16 +119,36 @@ cat_checker <- function(initial_parse) {
          if (name %in% cat_vars) {
             print(name)   
             initial_parse[[name]] <- as.factor(initial_parse[[name]])
-    }
+         }  
+         if (name == "SEX") {
+        initial_parse <- initial_parse %>% 
+          mutate(SEX = recode(SEX, "1" = "Male", "2" = "Female"))
       }
-    initial_parse <- initial_parse %>%
-      mutate(
-        SEX = recode(SEX, "1" = "Male", "2" = "Female"))
+      if (name == "SCHL") {
+        initial_parse <- initial_parse %>% 
+          mutate(SCHL = recode(SCHL, "0" = "N/A (less than 3 years old)", "1" = "No schooling completed", "2" = "Nursery school, preschool", "3" = "Kindergarten", "4" = "Grade 1", "5" = "Grade 2", "6" = "Grade 3", "7" = "Grade 4", "8" = "Grade 5", "9" = "Grade 6", "10" = "Grade 7", "11" = "Grade 8", "12" = "Grade 9", "13" = "Grade 10", "14" = "Grade 11", "15" = "12th grade - no diploma", "16" = "Regular high school diploma", "17" = "GED or alternative credential", "18" = "Some college, but less than 1 year", "19" = "1 or more years of college credit, no degree", "20" = "Associate’s degree", "21" = "Bachelor’s degree", "22" = "Master’s degree", "23" = "Professional degree beyond a bachelor’s degree", "24" = "Doctorate degree"))
+      }
+      if (name == "HISPEED") {
+        initial_parse <- initial_parse %>% 
+          mutate(HISPEED = recode(HISPEED, "0" = "N/A (GQ/vacant/no paid access to the internet)", "1" = "Yes", "2" = "No"))
+      }
+      if (name == "HHL") {
+        initial_parse <- initial_parse %>% 
+          mutate(HHL = recode(HHL, "0" = "N/A (GQ/vacant", "1" = "English Only", "2" = "Spanish", "3" = "Other Indo-European languages", "4" = "Asian and Pacific Island languages", "5" = "Other languages"))
+      }
+      if (name == "FER") {
+        initial_parse <- initial_parse %>% 
+          mutate(FER = recode(FER, "0" = "N/A (less than 15 years/greater than 50 years/ male)", "1" = "Yes", "2" = "No"))
+      }
+  
+
+    }
+
       return(initial_parse)
 }
 
 # Testing purposes/example
-# cat_checker(initial_parse)
+initial_parse <- cat_checker(initial_parse)
 ```
 
 -   Next we have the geography checker. This function has 1 parameter and takes in 1 vector. If the provided geography_level is in the geo_vars vector, it will print that the geography level is valid. If not then it will print is not valid.
@@ -229,9 +167,8 @@ geo_checker <- function(geography_level, geography_subset) {
   }
 }
 
-
 # Testing purposes/example
-# geo_checker("State", "08")
+geo_checker("State", "08")
 ```
 
 -   Here we have a function to query the census. This function contains 4 parameters. First, an empty tibble is initialized in order to store the results; this is important as it holds the multiple tibbles to later bind together. We assign a variable named year_list to take on the function string split for parameter, year, because we want to allow the user to be able to specify multiple years of survey data. String split works here because when inputting multiple years, "2012,2013,2015", the user needs to input the years all as one string, then strsplit will work to split the different years into a list of year to call each year separately. The for loop at the bottom, (i in year_list\[\[1\]\]), loops over the list of years from the user into the query_url, allowing them to make API requests for each given year.
@@ -248,8 +185,8 @@ census_query <- function(year, geography_level, geography_subset, get) {
     year_list <- strsplit(year, ",")
     url <- "https://api.census.gov/data/"
     if (grepl("PWGTP", get)) {
-      get <- gsub("PWGTP|PWGTP,",'',get) # to remove actual value or the comma after
-      get <- gsub("^\\,|\\,$",'',get) # catch all, if there's a comma before/after of user input
+      get <- gsub("PWGTP|PWGTP,",'',get)
+      get <- gsub("^\\,|\\,$",'',get) 
     }
     if (grepl("GASP", get)) {
       get <- gsub("GASP|GASP,",'',get)
@@ -276,22 +213,23 @@ census_query <- function(year, geography_level, geography_subset, get) {
     return(initial_parse_final)
 }
 
-
 # Testing purposes/example
-# initial_parse <- census_query(year = "2011,2014", "State", "08", "AGEP,SEX")
+initial_parse <- census_query(year = "2011,2014", "State", "08", "AGEP,SEX")
 ```
 
--   Now we can create our final/main API query. This API query contains 4 parameters (year = "2022", geography_level = "All", geography_subset and get = "SEX,AGEP,PWGTP", with their respective defaults) and takes in vector combined_vars. We create a strsplit for the get results, similarly to what we did for the years in the census_query results. When a user inputs variables, it will check and ensure those column names are valid. If they are then it will print, "Column X entered is valid" and if not then it will tell the user to try again. After that, initial_parse is reassigned and overwritten once it goes through each function (census_query, num_checker, time_checker, cat_checker) and checker (geo_checker, year_checker). Then will return a final tibble at the end.
+-   Now we can create our final/main API query. This API query contains 4 parameters (year = "2022", geography_level = "All", geography_subset and get = "SEX,AGEP,PWGTP", with their respective defaults) and takes in vector combined_vars. We create a strsplit for the get results, similarly to what we did for the years in the census_query results. When a user inputs variables, it will check and ensure those column names are valid. If they are then it will print, "Column X entered is valid" and if not then it will tell the user to try again. After that, initial_parse is reassigned and overwritten once it goes through each function (census_query, num_checker, time_checker, cat_checker) and checker (geo_checker, year_checker). Then it will return a final tibble at the end.
 
 ### API Function
+
 ```{r}
-# Main API Query Function
-# Added combined_vars and for loop to validate and check inputted columns are valid
+# Main API Query Function (combined all of the previous functions)
+# Added SEX, AGEP, PWGTP in the get of the main_query to be returned as default
+# Added combined_vars and for loop to validate and check that user inputted columns are valid
 
 main_query <- function(year = "2022", 
                        geography_level = "All", 
                        geography_subset,  
-                       get = "SEX,AGEP,PWGTP") {
+                       get = "SEX,AGEP,PWGTP") { 
     combined_vars <- c("AGEP", "GASP", "GRPIP", "JWMNP", "PWGTP", "FER", "HHL", "HISPEED", "JWTRNS", "SCH", "SCHL", "SEX", "JWAP", "JWDP")
     get_list <- strsplit(get, ",")
     for (i in get_list[[1]]) {
@@ -308,25 +246,26 @@ main_query <- function(year = "2022",
     geo_checker(geography_level, geography_subset)
     year_checker(year) 
     
-    #Add the census class (John this is for summary function in Part II don't delete)
+    # This is for the summary function in Part 2
     class(initial_parse) <-c("census", class(initial_parse))
     return(initial_parse)
 } 
 
 # Testing purposes/example
-# test <- main_query("2018,2015", "State", "08", "FER,JWAP,SEX,SCHL,GASP")
+test <- main_query("2018,2015", "State", "08", "FER,JWAP,SEX,SCHL,GASP")
  
 # All variable query
 everything <- main_query("2022", "State", "08", "AGEP,GASP,GRPIP,JWMNP,PWGTP,FER,HHL,HISPEED,JWTRNS,SCH,SCHL,SEX,JWAP,JWDP")
 print(everything)
 ```
 
+-   The API function, main_query, interacts, retrieves, and processes raw data from the U.S. Census API, and allows us to query, structure, and validate data, into a tibble based on user input. With that, we will move onto creating the summary and plot functions, hoping to research and analyze some interesting data that we extract from the API function.
 
 ## PART II Summarizing the Data and Plots
 
 ### Summary Function
 
--   In this section we have created 2 functions "Summary" function takes the data from tibble and generate summary statistics (mean and standard deviation) for all numeric variables and counts for all categorical variables from the data frame. This function takes three arguments - class census, numeric variables to generate summary statistics and categorical variables.
+-   In this section we have created 2 functions "Summary" function takes the data from tibble and generate summary statistics (mean and standard deviation) for all numeric variables and counts for all categorical variables from the data frame. This function takes three arguments - class census, numeric variables to generate summary statistics and categorical variables. The second function is a plot function, where we generate the box plot.
 
 ```{r}
 
@@ -505,7 +444,7 @@ summary.census <- function(object, numeric_vars = NULL, categorical_vars = NULL)
 
 ```
 
-Now Let's test our summary function. This will give us the weighted means and standard deviations for numeric variables and counts for categorical variables 
+Now Let's test our summary function. This will give us the weighted means and standard deviations for numeric variables and counts for categorical variables
 
 ```{r}
 
@@ -515,8 +454,7 @@ print(results1)
 
 ```
 
-We can use specific variables and check if we can generate the summary 
-for examples we can select few numeric variables and few categorical variables as follows
+We can use specific variables and check if we can generate the summary for examples we can select few numeric variables and few categorical variables as follows
 
 ```{r}
 
@@ -527,7 +465,6 @@ results <- summary.census(everything,
 
 print(results)
 ```
-
 
 ### Plot Function
 
@@ -634,10 +571,10 @@ rent_language_plot <- plot.census(everything,
 ```
 
 ## Understanding the data and interpresting it using statistics
+
 Now we are all set! We can extract the data using `main_query function` and summaries it by `summary.census function` also we can create box plots using the `plot function`. Let's understand the relationship between different variables and interpret the data using our summary and plot functions.
 
-For example we would like to get the answers of following questions
-#### What is the overall age and gender distribution of the population?
+For example we would like to get the answers of following questions \#### What is the overall age and gender distribution of the population?
 
 ```{r}
 # Get summary statistics
@@ -659,17 +596,13 @@ age_gender_plot <- plot.census(everything,
 
 **The summary statistics for age show:**
 
-Mean age: 38.80 years
-Standard deviation: 22.43 years
+Mean age: 38.80 years Standard deviation: 22.43 years
 
 **This indicates that:**
 
-The average age of the population is about 39 years old.
-There's a considerable spread in ages, with a standard deviation of about 22 years. This suggests a diverse population with a mix of younger and older individuals.
+The average age of the population is about 39 years old. There's a considerable spread in ages, with a standard deviation of about 22 years. This suggests a diverse population with a mix of younger and older individuals.
 
-**Gender Distribution**
- Male = 29,940 (50.03%)
- Female = 29,901 (49.97%) 
+**Gender Distribution** Male = 29,940 (50.03%) Female = 29,901 (49.97%)
 
 Which shows not much a difference in gender distribution
 
@@ -689,20 +622,14 @@ table(everything$SCHL, everything$SEX)
 
 This analysis gives us a detailed picture of educational attainment patterns across age groups and genders in your population. It highlights the progress made in educational equality, particularly in higher education, while also pointing out areas where disparities still exist.
 
-From the contingency table we can compare the two groups (Male vs Female)
-  The most common education level for both genders is "21" (Bachelor's degree), followed by "16" (Regular     high school diploma).
-  Women tend to outnumber men in Associate's degrees (20) and Bachelor's degrees (21).
-    Men slightly outnumber women in Professional degrees beyond a bachelor's degree (23).
+From the contingency table we can compare the two groups (Male vs Female) The most common education level for both genders is "21" (Bachelor's degree), followed by "16" (Regular high school diploma). Women tend to outnumber men in Associate's degrees (20) and Bachelor's degrees (21). Men slightly outnumber women in Professional degrees beyond a bachelor's degree (23).
 
 From the box plot we observe following things
 
-  There's a wide range of ages for most education levels, indicating lifelong learning or varied             educational paths.
-  The median age generally increases with higher levels of educational attainment.
-  Lower education levels (0-9) show a wide age range, possibly indicating both young individuals still in     school and older individuals with limited formal education.
-  Higher education levels (16-24) show higher median ages, as expected.
-  There's a noticeable jump in median age for doctorate degrees (24), with females having a slightly         higher median age than males.
-  
+There's a wide range of ages for most education levels, indicating lifelong learning or varied educational paths. The median age generally increases with higher levels of educational attainment. Lower education levels (0-9) show a wide age range, possibly indicating both young individuals still in school and older individuals with limited formal education. Higher education levels (16-24) show higher median ages, as expected. There's a noticeable jump in median age for doctorate degrees (24), with females having a slightly higher median age than males.
+
 #### What are the most common means of transportation to work, and how do they relate to commute times?
+
 ```{r}
 # Get summary of transportation methods
 summary_stats <- summary.census(everything)
@@ -719,19 +646,19 @@ plot.census(everything,
 
 
 ```
- This analysis gives us a clear picture of the transportation landscape in your population. The dominance of personal vehicles, the significant proportion of remote workers, and the relatively low usage of public transit are key findings that have important implications for urban planning, environmental policies, and quality of life in the area.
- 
-  *Non-commuters or Unspecified:* The largest category is "N/A" (49.6%), which likely includes non-workers, remote workers, or those with unspecified commute methods.
-  
-  *Vehicle Dominance:* Among those who commute, personal vehicles (car, truck, or van) are overwhelmingly the most common method, used by 36.0% of the total population and 70.9% of specified commuters.
-Remote Work Trend: A significant portion (11.4%) work from home, reflecting modern work trends and potentially impacting traditional commute patterns.
 
-  *Active Transportation:* Walking (1.4%) and cycling (0.6%) combined account for 2% of commuters, representing a small but notable group using active transportation.
-  
-  *Public Transit:* All forms of public transit (bus, light rail, subway, train) combined account for only about 0.7% of commuters, suggesting limited public transit infrastructure or usage.
-  
-  *Alternative Methods:* Motorcycles, taxicabs, and ferryboats are used by a very small fraction of commuters, likely reflecting niche transportation needs or preferences.
-  
+This analysis gives us a clear picture of the transportation landscape in your population. The dominance of personal vehicles, the significant proportion of remote workers, and the relatively low usage of public transit are key findings that have important implications for urban planning, environmental policies, and quality of life in the area.
+
+*Non-commuters or Unspecified:* The largest category is "N/A" (49.6%), which likely includes non-workers, remote workers, or those with unspecified commute methods.
+
+*Vehicle Dominance:* Among those who commute, personal vehicles (car, truck, or van) are overwhelmingly the most common method, used by 36.0% of the total population and 70.9% of specified commuters. Remote Work Trend: A significant portion (11.4%) work from home, reflecting modern work trends and potentially impacting traditional commute patterns.
+
+*Active Transportation:* Walking (1.4%) and cycling (0.6%) combined account for 2% of commuters, representing a small but notable group using active transportation.
+
+*Public Transit:* All forms of public transit (bus, light rail, subway, train) combined account for only about 0.7% of commuters, suggesting limited public transit infrastructure or usage.
+
+*Alternative Methods:* Motorcycles, taxicabs, and ferryboats are used by a very small fraction of commuters, likely reflecting niche transportation needs or preferences.
+
 #### Is there a relationship between household language and economic indicators like rent burden?
 
 ```{r}
@@ -822,59 +749,37 @@ print(user_counts)
 
 **Summary Statistics:**
 
-*Car Users:* Mean GRPIP = 32.9%, Median = 26%
-*Public Transport Users:* Mean GRPIP = 39.1%, Median = 31%
-
+*Car Users:* Mean GRPIP = 32.9%, Median = 26% *Public Transport Users:* Mean GRPIP = 39.1%, Median = 31%
 
 **Boxplot Analysis (Image 1):**
 
-The median rent burden for public transport users is higher than for car users.
-Public transport users show a wider interquartile range, indicating more variability in rent burden.
-Both groups have outliers, but public transport users have more extreme high outliers.
-
+The median rent burden for public transport users is higher than for car users. Public transport users show a wider interquartile range, indicating more variability in rent burden. Both groups have outliers, but public transport users have more extreme high outliers.
 
 **Density Plot Analysis (Image 2):**
 
-The distribution for car users is more peaked and concentrated around lower GRPIP values.
-Public transport users have a flatter, more spread-out distribution, with a higher density at higher GRPIP values.
-
+The distribution for car users is more peaked and concentrated around lower GRPIP values. Public transport users have a flatter, more spread-out distribution, with a higher density at higher GRPIP values.
 
 **T-test Results:**
 
-t-statistic: -3.4031
-p-value: 0.0007882 (highly significant)
-95% confidence interval: [-9.76, -2.60]
-The test indicates a statistically significant difference in mean GRPIP between car and public transport users.
-
+t-statistic: -3.4031 p-value: 0.0007882 (highly significant) 95% confidence interval: \[-9.76, -2.60\] The test indicates a statistically significant difference in mean GRPIP between car and public transport users.
 
 Mean GRPIP:
 
-Car: 32.90%
-Public Transport: 39.08%
-
+Car: 32.90% Public Transport: 39.08%
 
 User Counts:
 
-Car: 5,456 users
-Public Transport: 214 users
-
-
+Car: 5,456 users Public Transport: 214 users
 
 **Key Findings:**
 
-  1. Significant Difference: There is a statistically significant difference in rent burden between car       users and public transport users.
-  2. Higher Burden for Public Transport Users: On average, public transport users spend about 6.2% more       of their income on rent compared to car users.
-  3. Variability: Public transport users show more variability in their rent burden, with a wider range       of GRPIP values.
-  4. Predominance of Car Users: There's a much larger number of car users compared to public transport        users in the sample.
-  
-  
+1.  Significant Difference: There is a statistically significant difference in rent burden between car users and public transport users.
+2.  Higher Burden for Public Transport Users: On average, public transport users spend about 6.2% more of their income on rent compared to car users.
+3.  Variability: Public transport users show more variability in their rent burden, with a wider range of GRPIP values.
+4.  Predominance of Car Users: There's a much larger number of car users compared to public transport users in the sample.
+
 ## Summary and Conclusion
-In this project we extracted The Public Use Microdata Sample (PUMS) Census API (Application Programming Interface) using `main_query` function. The `summary.census` function is used to summarize the data.
-The `plot` function is used to plot the box plot. The data is analyzed to answer the key questions such as 
-  1. What is the overall age and gender distribution of the population?
-  2. Is there a relationship between household language and economic indicators like rent burden?
-  3. How does the educational attainment vary across age groups and genders?
-  4. What are the most common means of transportation to work, and how do they relate to commute times?
-  5. Is there any relationship between the Mean of Transportation and Rent Burden?
-  
-  In summary, there is no large gap between the gender distribution. The dominance of personal vehicles, the significant proportion of remote workers, and the relatively low usage of public transit are key findings. Addressing the question about the connection between household language and economic indicators, the data suggests that there's a clear disparity in rent burden across language groups, with English-only households generally facing lower rent burdens. There's a noticeable jump in median age for doctorate degrees (24), with females having a slightly higher median age than males. While checking the relationship between the mean of transportation and rent burden [we came to conclusion that the analysis reveals a strong relationship between transportation method choice and rent burden, with public transport users facing significantly higher housing cost burdens. This insight could be valuable for urban planners, policymakers, and researchers focusing on transportation equity and affordable housing initiatives.]{style="text-decoration: underline;"}    
+
+In this project we extracted The Public Use Microdata Sample (PUMS) Census API (Application Programming Interface) using `main_query` function. The `summary.census` function is used to summarize the data. This main_query function acts as an important tool for researchers and others to quickly access data from the U.S. Census in a customizable way to create tibbles for analysis regarding the U.S. population and housing units. The `plot` function is used to plot the box plot. The data is analyzed to answer the key questions such as 1. What is the overall age and gender distribution of the population? 2. Is there a relationship between household language and economic indicators like rent burden? 3. How does the educational attainment vary across age groups and genders? 4. What are the most common means of transportation to work, and how do they relate to commute times? 5. Is there any relationship between the Mean of Transportation and Rent Burden?
+
+In summary, there is no large gap between the gender distribution. The dominance of personal vehicles, the significant proportion of remote workers, and the relatively low usage of public transit are key findings. Addressing the question about the connection between household language and economic indicators, the data suggests that there's a clear disparity in rent burden across language groups, with English-only households generally facing lower rent burdens. There's a noticeable jump in median age for doctorate degrees (24), with females having a slightly higher median age than males. While checking the relationship between the mean of transportation and rent burden [we came to conclusion that the analysis reveals a strong relationship between transportation method choice and rent burden, with public transport users facing significantly higher housing cost burdens. This insight could be valuable for urban planners, policymakers, and researchers focusing on transportation equity and affordable housing initiatives.]{style="text-decoration: underline;"}
